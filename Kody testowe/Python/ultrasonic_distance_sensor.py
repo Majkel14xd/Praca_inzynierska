@@ -9,7 +9,7 @@ print("Board connected")
 
 
 def distanceprint(data):
-    print("Distance", data)
+    print("Distance", data[2])
 
 
 board.set_pin_mode_sonar(trigpin, echopin, distanceprint)
