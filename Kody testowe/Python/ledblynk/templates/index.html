@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>LED Control</title>
+  </head>
+  <body>
+    <h2>LED Control</h2>
+
+    <form method="post">
+      {% csrf_token %}
+      <label for="led1">LED 1:</label>
+      <input type="checkbox" name="led1_state" value="on" /> ON
+      <input type="checkbox" name="led1_state" value="off" /> OFF <br /><br />
+
+      <label for="led2">LED 2:</label>
+      <input type="checkbox" name="led2_state" value="on" /> ON
+      <input type="checkbox" name="led2_state" value="off" /> OFF <br /><br />
+
+      <input type="submit" value="Apply" />
+    </form>
+  </body>
+</html>
