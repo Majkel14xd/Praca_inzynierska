@@ -1,0 +1,6 @@
+{
+    "port": "COM5",
+    "board": "arduino:avr:uno",
+    "programmer": "avrispmkii",
+    "sketch": "Kody_testowe\\C_Arduino\\blynktest_withled\\blynktest_withled.ino"
+}
