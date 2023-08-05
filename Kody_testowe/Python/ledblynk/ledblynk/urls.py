@@ -17,8 +17,9 @@ Including another URLconf
 from django.urls import path
 from ledblynkapp import views
 
-app_name = 'ledblynkapp'
+app_name = "ledblynkapp"
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path("", views.index, name="index"),
+    path("save_pin_state/", views.save_pin_state, name="save_pin_state"),
 ]

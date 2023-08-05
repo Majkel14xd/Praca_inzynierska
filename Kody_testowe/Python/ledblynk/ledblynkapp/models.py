@@ -1,3 +1,10 @@
 from django.db import models
 
-# Create your models here.
+
+class SensorData(models.Model):
+    timestamp = models.DateTimeField()
+    pin = models.TextField()
+    value = models.IntegerField()
+
+    class Meta:
+        db_table = "sensordata"

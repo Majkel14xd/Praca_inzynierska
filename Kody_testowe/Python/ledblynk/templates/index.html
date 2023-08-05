@@ -18,5 +18,10 @@
 
       <input type="submit" value="Apply" />
     </form>
+    {% if error_message %}
+    <p style="color: red">Błąd: {{ error_message }}</p>
+    {% endif %} {% if message %}
+    <p style="color: green">Sukces: {{ message }}</p>
+    {% endif %}
   </body>
 </html>

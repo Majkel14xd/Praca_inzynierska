@@ -34,6 +34,8 @@ void setup()
 
   pinMode(LED1, OUTPUT);
   pinMode(LED2, OUTPUT);
+  Blynk.virtualWrite(V0,0);
+  Blynk.virtualWrite(V1,0);
 }
 
 void loop()
@@ -61,7 +63,7 @@ BLYNK_WRITE(V1)
 {
   if(param.asInt() == 1)
   {
-    
+
     digitalWrite(LED2,HIGH); 
       Serial.println("LED2 ON");
   }
