@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    "*.embeddedhtml": "html",
+    "*.ino": "cpp",
+    "vector": "cpp"
+  }
+}
