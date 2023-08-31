@@ -206,6 +206,52 @@ void connect_to_mysql_database()
         MYSQL_DISPLAY("Connecting to database unsuccessful");
     }
 }
+void check_database_or_create_database()
+{
+    String check_database_query = String("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '") + database + "'";
+    String create_database = String("CREATE DATABASE ") + database + ";";
+    MYSQL_DISPLAY("Checking database exist");
+    MYSQL_DISPLAY(check_database_query);
+
+    // Initiate the query class instance
+    MySQL_Query query_mem = MySQL_Query(&conn);
+
+    // Execute the query
+
+    // KH, check if valid before fetching
+    if (!query_mem.execute(check_database_query.c_str()))
+    {
+        MYSQL_DISPLAY("Querying error");
+        return;
+    }
+    column_names *cols = query_mem.get_columns();
+
+    if (cols->num_fields > 0)
+    {
+        MYSQL_DISPLAY();
+
+        row_values *row = query_mem.get_next_row();
+
+        if (row != NULL)
+        {
+            if (String(row->values[0]) == String(database))
+            {
+                MYSQL_DISPLAY("Database exists");
+            }
+        }
+        else
+        {
+            MYSQL_DISPLAY("Database not exists");
+            MYSQL_DISPLAY("Creating database");
+            if (!query_mem.execute(create_database.c_str()))
+            {
+                MYSQL_DISPLAY("Querying error, database not added");
+                return;
+            }
+            MYSQL_DISPLAY("Database creating");
+        }
+    }
+}
 /*Setup*/
 void setup()
 {
@@ -214,6 +260,9 @@ void setup()
     connect_wifi_to_database();
     delay(1000);
     connect_to_mysql_database();
+    delay(1000);
+    check_database_or_create_database();
+    delay(1000);
     pin_setup();
     delay(1000);
     blynk_setup_and_virtual_pins();
