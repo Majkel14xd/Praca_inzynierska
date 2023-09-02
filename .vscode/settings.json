@@ -5,6 +5,9 @@
     "vector": "cpp",
     "array": "cpp",
     "string": "cpp",
-    "string_view": "cpp"
+    "string_view": "cpp",
+    "*.tcc": "cpp",
+    "fstream": "cpp",
+    "new": "cpp"
   }
 }

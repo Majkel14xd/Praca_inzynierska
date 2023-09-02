@@ -37,6 +37,9 @@ char pass[] = "tw6eUEH8";
 char userdatabse[] = "Majkel14xd";
 char passworddatabase[] = "zaq1@WSX";
 char database[] = "rain_measurement_system";
+char table_water_sesnor[] = "water_sensor";
+char table_rain_gaugae[] = "rain_gaugae";
+char table_rain_sensor[] = "rain_sensor";
 int water_sensor_value = 0;
 int rain_sesnor_value = 0;
 int capacitygaugae = 1000;
@@ -49,7 +52,6 @@ IPAddress serverIP(192, 168, 100, 12);
 NewPing sonar(TRIG_PIN_ULTR_SONIC_SENSOR, ECHO_PIN_ULTR_SONIC_SENSOR);
 MySQL_Connection conn((Client *)&client);
 MySQL_Query *query_mem;
-
 /*Blynk Functions*/
 BLYNK_CONNECTED()
 {
@@ -134,6 +136,7 @@ void rain_gaugae()
 
 void water_sensor()
 {
+    // String water_sensor_add_to_database = String("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '") + database + "'";
     water_sensor_value = analogRead(WATER_SESNOR_ANALOG_PIN);
     Blynk.virtualWrite(WATER_SENSOR_VALUE, water_sensor_value);
     Serial.print("Stan czujnika wody wynosi: ");
@@ -197,7 +200,7 @@ void connect_wifi_to_database()
 void connect_to_mysql_database()
 {
     MYSQL_DISPLAY3("Connecting to SQL Server @", serverIP, ", Port =", server_port);
-    if (conn.connectNonBlocking(serverIP, server_port, userdatabse, passworddatabase) != RESULT_FAIL)
+    if (conn.connect(serverIP, server_port, userdatabse, passworddatabase))
     {
         MYSQL_DISPLAY("Connecting to database successful");
     }
@@ -208,18 +211,12 @@ void connect_to_mysql_database()
 }
 void check_database_or_create_database()
 {
-    String check_database_query = String("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '") + database + "'";
+    String check_database_query = String("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '") + database + "';";
     String create_database = String("CREATE DATABASE ") + database + ";";
     MYSQL_DISPLAY("Checking database exist");
     MYSQL_DISPLAY(check_database_query);
-
-    // Initiate the query class instance
     MySQL_Query query_mem = MySQL_Query(&conn);
-
-    // Execute the query
-
-    // KH, check if valid before fetching
-    if (!query_mem.execute(check_database_query.c_str()))
+    if (!query_mem.execute(check_database_query.c_str(), true))
     {
         MYSQL_DISPLAY("Querying error");
         return;
@@ -228,27 +225,69 @@ void check_database_or_create_database()
 
     if (cols->num_fields > 0)
     {
-        MYSQL_DISPLAY();
-
         row_values *row = query_mem.get_next_row();
-
         if (row != NULL)
         {
             if (String(row->values[0]) == String(database))
             {
                 MYSQL_DISPLAY("Database exists");
+                query_mem.close();
             }
         }
+
         else
         {
             MYSQL_DISPLAY("Database not exists");
             MYSQL_DISPLAY("Creating database");
-            if (!query_mem.execute(create_database.c_str()))
+            if (!query_mem.execute(create_database.c_str(), true))
             {
                 MYSQL_DISPLAY("Querying error, database not added");
                 return;
             }
             MYSQL_DISPLAY("Database creating");
+            query_mem.close();
+        }
+    }
+}
+void check_tables_database()
+{
+    String check_water_sensor_table_exist = String("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '") + database + "' AND TABLE_NAME = '" + table_water_sesnor + "';";
+    String check_rain_sensor_table_exist = String("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '") + database + "' AND TABLE_NAME = '" + table_rain_sensor + "';";
+    String check_rain_gaugae_table_exist = String("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '") + database + "' AND TABLE_NAME = '" + table_rain_gaugae + "';";
+    String create_table_rain_sensor = String("CREATE TABLE `") + database + "`.`" + table_water_sesnor + "`(`ID` INT NOT NULL AUTO_INCREMENT, `Data_odczytu` DATE NOT NULL, `Wartosc` INT NOT NULL, `Wartosc_tekstowa` VARCHAR(255) NOT NULL, `Alert` VARCHAR(255) NOT NULL, PRIMARY KEY(`ID`))ENGINE = InnoDB;";
+    MYSQL_DISPLAY("Checking database tables");
+    MYSQL_DISPLAY("Checking water sensor table");
+    MYSQL_DISPLAY(check_water_sensor_table_exist);
+    MySQL_Query query_mem = MySQL_Query(&conn);
+    if (!query_mem.execute(check_water_sensor_table_exist.c_str(), true))
+    {
+        MYSQL_DISPLAY("Querying error");
+        return;
+    }
+    column_names *cols = query_mem.get_columns();
+
+    if (cols->num_fields > 0)
+    {
+        row_values *row = query_mem.get_next_row();
+        if (row != NULL)
+        {
+            if (String(row->values[0]) == String(table_water_sesnor))
+            {
+                MYSQL_DISPLAY("Table exists");
+                query_mem.close();
+            }
+        }
+        else
+        {
+            MYSQL_DISPLAY("Table not exists");
+            MYSQL_DISPLAY("Creating table water_sensor");
+            if (!query_mem.execute(create_table_rain_sensor.c_str(), true))
+            {
+                MYSQL_DISPLAY("Querying error, table not added");
+                return;
+            }
+            MYSQL_DISPLAY("Table creating");
+            query_mem.close();
         }
     }
 }
@@ -262,6 +301,8 @@ void setup()
     connect_to_mysql_database();
     delay(1000);
     check_database_or_create_database();
+    delay(1000);
+    check_tables_database();
     delay(1000);
     pin_setup();
     delay(1000);
