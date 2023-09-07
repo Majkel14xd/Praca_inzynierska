@@ -33,6 +33,3 @@ ENGINE = InnoDB;
 PRIMARY KEY (`ID`)
 ) 
 ENGINE = InnoDB;
-
-
-INSERT INTO `rain_measurement_system`.`water_sensor`(Data_odczytu, Godzina_odczytu, Wartosc, Wartosc_tekstowa, Alert) VALUES (`2023-9-7`,`1:53:25`,`29`,`Poziom wysoki zbiornika`,`Zbiornik do oproznienia`);
