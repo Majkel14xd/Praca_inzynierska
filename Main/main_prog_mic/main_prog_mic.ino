@@ -42,6 +42,9 @@ char database[] = "rain_measurement_system";
 char table_water_sesnor[] = "water_sensor";
 char table_rain_gaugae[] = "rain_gaugae";
 char table_rain_sensor[] = "rain_sensor";
+char table_logs[] = "logs";
+int status_rain_sensor_pin_virtual = 1;
+int status_water_sensor_pin_virtual = 1;
 int water_sensor_value = 0;
 int rain_sesnor_value = 0;
 int capacitygaugae = 1000;
@@ -64,54 +67,132 @@ BLYNK_CONNECTED()
 
 BLYNK_WRITE(WATER_SENSOR_POWER_ON_OFF)
 {
-    if (param.asInt() == 1)
+    status_water_sensor_pin_virtual = param.asInt();
+    String table_logs_insert;
+
+    if (status_water_sensor_pin_virtual == 1)
     {
         digitalWrite(WATER_SENSOR_PIN_DIGITAL, HIGH);
         Serial.println("Wlaczony czujnik poziomu zbiornika");
+        table_logs_insert = String("INSERT INTO `") + database + "`.`" + table_logs + "`( `Data_zdarzenia`, `Godzina_zdarzenia`, `Opis_zdarzenia`) VALUES ('" + get_date() + "','" + get_time() + "','Wlaczony czujnik poziomu zbiornika');";
     }
-    else if (param.asInt() == 0)
+    else if (status_water_sensor_pin_virtual == 0)
     {
-
         digitalWrite(WATER_SENSOR_PIN_DIGITAL, LOW);
-        Serial.println("Wlaczony czujnik poziomu zbiornika");
+        Serial.println("Wylaczony czujnik poziomu zbiornika");
+        table_logs_insert = String("INSERT INTO `") + database + "`.`" + table_logs + "`( `Data_zdarzenia`, `Godzina_zdarzenia`, `Opis_zdarzenia`) VALUES ('" + get_date() + "','" + get_time() + "','Wylaczony czujnik poziomu zbiornika');";
     }
+    connect_to_database_again();
+    MySQL_Query query_mem = MySQL_Query(&conn);
+    if (conn.connected())
+    {
+        MYSQL_DISPLAY(table_logs_insert);
+        if (!query_mem.execute(table_logs_insert.c_str()))
+        {
+            MYSQL_DISPLAY("Insert error");
+        }
+        else
+        {
+            MYSQL_DISPLAY("Data Inserted.");
+        }
+    }
+    else
+    {
+        MYSQL_DISPLAY("Error server connected");
+    }
+    conn.close();
 }
 
 BLYNK_WRITE(RAIN_SENSOR_POWER_ON_OFF)
 {
-    if (param.asInt() == 1)
+    status_rain_sensor_pin_virtual = param.asInt();
+    String table_logs_insert;
+    if (status_rain_sensor_pin_virtual == 1)
     {
         digitalWrite(RAIN_SENSOR_PIN_DIGITAL, HIGH);
         Serial.println("Wlaczony czujnik opadow deszczu");
+        table_logs_insert = String("INSERT INTO `") + database + "`.`" + table_logs + "`( `Data_zdarzenia`, `Godzina_zdarzenia`, `Opis_zdarzenia`) VALUES ('" + get_date() + "','" + get_time() + "','Wlaczony czujnik opadow deszczu');";
     }
-    else if (param.asInt() == 0)
+    else if (status_rain_sensor_pin_virtual == 0)
     {
 
         digitalWrite(RAIN_SENSOR_PIN_DIGITAL, LOW);
         Serial.println("Wylaczony czujnik opadow deszczu");
+        table_logs_insert = String("INSERT INTO `") + database + "`.`" + table_logs + "`( `Data_zdarzenia`, `Godzina_zdarzenia`, `Opis_zdarzenia`) VALUES ('" + get_date() + "','" + get_time() + "','Wylaczony czujnik opadow deszczu');";
     }
+    connect_to_database_again();
+    MySQL_Query query_mem = MySQL_Query(&conn);
+    if (conn.connected())
+    {
+        MYSQL_DISPLAY(table_logs_insert);
+        if (!query_mem.execute(table_logs_insert.c_str()))
+        {
+            MYSQL_DISPLAY("Insert error");
+        }
+        else
+        {
+            MYSQL_DISPLAY("Data Inserted.");
+        }
+    }
+    else
+    {
+        MYSQL_DISPLAY("Error server connected");
+    }
+    conn.close();
 }
 /*Owns Functions*/
 void rain_sensor()
 {
+    String rain_sesnor_insert;
     rain_sesnor_value = analogRead(RAIN_SENSOR_ANALOG_PIN);
     Blynk.virtualWrite(RAIN_SENSOR_VALUE, rain_sesnor_value);
     Serial.print("Stan czujnika opadow deszczu wynosi: ");
     Serial.println(rain_sesnor_value);
-    if (rain_sesnor_value > 1000)
+    if (status_rain_sensor_pin_virtual == 1)
     {
-        Serial.println("Brak opadow");
-        Blynk.virtualWrite(RAIN_SENSOR_TEXT_VALUE, "Brak opadow");
-    }
-    else if (rain_sesnor_value < 1000 && rain_sesnor_value >= 512)
-    {
-        Serial.println("Slabe opady");
-        Blynk.virtualWrite(RAIN_SENSOR_TEXT_VALUE, "Slabe opady");
+        if (rain_sesnor_value > 1000)
+        {
+            Serial.println("Brak opadow");
+            Blynk.virtualWrite(RAIN_SENSOR_TEXT_VALUE, "Brak opadow");
+            rain_sesnor_insert = String("INSERT INTO `") + database + "`.`" + table_rain_sensor + "`(Data_odczytu, Godzina_odczytu, Wartosc, Wartosc_tekstowa) VALUES ('" + get_date() + "','" + get_time() + "','" + rain_sesnor_value + "','Brak opadow');";
+        }
+        else if (rain_sesnor_value < 1000 && rain_sesnor_value >= 512)
+        {
+            Serial.println("Slabe opady");
+            Blynk.virtualWrite(RAIN_SENSOR_TEXT_VALUE, "Slabe opady");
+            rain_sesnor_insert = String("INSERT INTO `") + database + "`.`" + table_rain_sensor + "`(Data_odczytu, Godzina_odczytu, Wartosc, Wartosc_tekstowa) VALUES ('" + get_date() + "','" + get_time() + "','" + rain_sesnor_value + "','Slabe opady');";
+        }
+        else
+        {
+            Serial.println("Silne opady");
+            Blynk.virtualWrite(RAIN_SENSOR_TEXT_VALUE, "Silne opady");
+            rain_sesnor_insert = String("INSERT INTO `") + database + "`.`" + table_rain_sensor + "`(Data_odczytu, Godzina_odczytu, Wartosc, Wartosc_tekstowa) VALUES ('" + get_date() + "','" + get_time() + "','" + rain_sesnor_value + "','Silne opady');";
+        }
+
+        connect_to_database_again();
+        MySQL_Query query_mem = MySQL_Query(&conn);
+        if (conn.connected())
+        {
+            MYSQL_DISPLAY(rain_sesnor_insert);
+            if (!query_mem.execute(rain_sesnor_insert.c_str()))
+            {
+                MYSQL_DISPLAY("Insert error");
+            }
+            else
+            {
+                MYSQL_DISPLAY("Data Inserted.");
+            }
+        }
+        else
+        {
+            MYSQL_DISPLAY("Error server connected");
+        }
+        conn.close();
     }
     else
     {
-        Serial.println("Silne opady");
-        Blynk.virtualWrite(RAIN_SENSOR_TEXT_VALUE, "Silne opady");
+        Serial.println("Brak danych");
+        Blynk.virtualWrite(RAIN_SENSOR_TEXT_VALUE, "Brak danych");
     }
 }
 
@@ -136,46 +217,14 @@ void rain_gaugae()
     Serial.println(" Poziom deszczu wynosi: ");
     Serial.print(rainlevel);
     Blynk.virtualWrite(RAIN_GAUGE_VALUE, rainlevel);
-}
-
-void water_sensor()
-{
-    water_sensor_value = analogRead(WATER_SESNOR_ANALOG_PIN);
-    Blynk.virtualWrite(WATER_SENSOR_VALUE, water_sensor_value);
-    Serial.print("Stan czujnika wody wynosi: ");
-    Serial.println(water_sensor_value);
-    String water_sesnor_insert;
-    if (water_sensor_value <= 10)
-    {
-        Blynk.virtualWrite(WATER_SENSOR_TEXT_VALUE, "Poziom niski zbiornika");
-        Serial.println("Poziom niski zbiornika");
-        Blynk.virtualWrite(WATER_NOTIFICATION, "Zbiornik jeszcze nie do oproznienia");
-        Serial.println("Zbiornik jeszcze nie do oproznienia");
-        water_sesnor_insert = String("INSERT INTO `") + database + "`.`" + table_water_sesnor + "`(Data_odczytu, Godzina_odczytu, Wartosc, Wartosc_tekstowa, Alert) VALUES ('" + get_date() + "','" + get_time() + "','" + water_sensor_value + "','Poziom niski zbiornika','Zbiornik jeszcze nie do oproznienia');";
-    }
-    else if (water_sensor_value >= 11 && water_sensor_value <= 400)
-    {
-        Blynk.virtualWrite(WATER_SENSOR_TEXT_VALUE, "Poziom wysoki zbiornika");
-        Serial.println("Poziom wysoki zbiornika");
-        Blynk.virtualWrite(WATER_NOTIFICATION, "Zbiornik do oproznienia");
-        Serial.println("Zbiornik do oproznienia");
-        water_sesnor_insert = String("INSERT INTO `") + database + "`.`" + table_water_sesnor + "`(Data_odczytu, Godzina_odczytu, Wartosc, Wartosc_tekstowa, Alert) VALUES ('" + get_date() + "','" + get_time() + "','" + water_sensor_value + "','Poziom wysoki zbiornika','Zbiornik do oproznienia');";
-    }
-    else
-    {
-        Blynk.virtualWrite(WATER_SENSOR_TEXT_VALUE, "Stan krytyczny zbiornika");
-        Serial.println("Stan krytyczny zbiornika");
-        Blynk.virtualWrite(WATER_NOTIFICATION, "Zbiornik do oproznienia");
-        Serial.println("Zbiornik do oproznienia");
-        water_sesnor_insert = String("INSERT INTO `") + database + "`.`" + table_water_sesnor + "`(Data_odczytu, Godzina_odczytu, Wartosc, Wartosc_tekstowa, Alert) VALUES ('" + get_date() + "','" + get_time() + "','" + water_sensor_value + "','Stan krytyczny zbiornika','Zbiornik do oproznienia');";
-    }
+    String rain_gaugae_insert = String("INSERT INTO `") + database + "`.`" + table_rain_gaugae + "`(`Data_odczytu`, `Godzina_odczytu`, `Wartosc`) VALUES ('" + get_date() + "','" + get_time() + "','" + rainlevel + "');";
     connect_to_database_again();
     MySQL_Query query_mem = MySQL_Query(&conn);
 
     if (conn.connected())
     {
-        MYSQL_DISPLAY(water_sesnor_insert);
-        if (!query_mem.execute(water_sesnor_insert.c_str()))
+        MYSQL_DISPLAY(rain_gaugae_insert);
+        if (!query_mem.execute(rain_gaugae_insert.c_str()))
         {
             MYSQL_DISPLAY("Insert error");
         }
@@ -189,6 +238,70 @@ void water_sensor()
         MYSQL_DISPLAY("Error server connected");
     }
     conn.close();
+}
+
+void water_sensor()
+{
+    water_sensor_value = analogRead(WATER_SESNOR_ANALOG_PIN);
+    Blynk.virtualWrite(WATER_SENSOR_VALUE, water_sensor_value);
+    Serial.print("Stan czujnika wody wynosi: ");
+    Serial.println(water_sensor_value);
+    String water_sesnor_insert;
+    if (status_water_sensor_pin_virtual == 1)
+    {
+        if (water_sensor_value <= 10)
+        {
+            Blynk.virtualWrite(WATER_SENSOR_TEXT_VALUE, "Poziom niski zbiornika");
+            Serial.println("Poziom niski zbiornika");
+            Blynk.virtualWrite(WATER_NOTIFICATION, "Zbiornik jeszcze nie do oproznienia");
+            Serial.println("Zbiornik jeszcze nie do oproznienia");
+            water_sesnor_insert = String("INSERT INTO `") + database + "`.`" + table_water_sesnor + "`(Data_odczytu, Godzina_odczytu, Wartosc, Wartosc_tekstowa, Alert) VALUES ('" + get_date() + "','" + get_time() + "','" + water_sensor_value + "','Poziom niski zbiornika','Zbiornik jeszcze nie do oproznienia');";
+        }
+        else if (water_sensor_value >= 11 && water_sensor_value <= 400)
+        {
+            Blynk.virtualWrite(WATER_SENSOR_TEXT_VALUE, "Poziom wysoki zbiornika");
+            Serial.println("Poziom wysoki zbiornika");
+            Blynk.virtualWrite(WATER_NOTIFICATION, "Zbiornik do oproznienia");
+            Serial.println("Zbiornik do oproznienia");
+            water_sesnor_insert = String("INSERT INTO `") + database + "`.`" + table_water_sesnor + "`(Data_odczytu, Godzina_odczytu, Wartosc, Wartosc_tekstowa, Alert) VALUES ('" + get_date() + "','" + get_time() + "','" + water_sensor_value + "','Poziom wysoki zbiornika','Zbiornik do oproznienia');";
+        }
+        else
+        {
+            Blynk.virtualWrite(WATER_SENSOR_TEXT_VALUE, "Stan krytyczny zbiornika");
+            Serial.println("Stan krytyczny zbiornika");
+            Blynk.virtualWrite(WATER_NOTIFICATION, "Zbiornik do oproznienia");
+            Serial.println("Zbiornik do oproznienia");
+            water_sesnor_insert = String("INSERT INTO `") + database + "`.`" + table_water_sesnor + "`(Data_odczytu, Godzina_odczytu, Wartosc, Wartosc_tekstowa, Alert) VALUES ('" + get_date() + "','" + get_time() + "','" + water_sensor_value + "','Stan krytyczny zbiornika','Zbiornik do oproznienia');";
+        }
+
+        connect_to_database_again();
+        MySQL_Query query_mem = MySQL_Query(&conn);
+
+        if (conn.connected())
+        {
+            MYSQL_DISPLAY(water_sesnor_insert);
+            if (!query_mem.execute(water_sesnor_insert.c_str()))
+            {
+                MYSQL_DISPLAY("Insert error");
+            }
+            else
+            {
+                MYSQL_DISPLAY("Data Inserted.");
+            }
+        }
+        else
+        {
+            MYSQL_DISPLAY("Error server connected");
+        }
+        conn.close();
+    }
+    else
+    {
+        Blynk.virtualWrite(WATER_SENSOR_TEXT_VALUE, "Brak danych");
+        Serial.println("Brak danych");
+        Blynk.virtualWrite(WATER_NOTIFICATION, "Brak danych");
+        Serial.println("Brak danych");
+    }
 }
 
 void pin_setup()
@@ -282,9 +395,12 @@ void check_tables_database()
     String check_water_sensor_table_exist = String("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '") + database + "' AND TABLE_NAME = '" + table_water_sesnor + "';";
     String check_rain_sensor_table_exist = String("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '") + database + "' AND TABLE_NAME = '" + table_rain_sensor + "';";
     String check_rain_gaugae_table_exist = String("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '") + database + "' AND TABLE_NAME = '" + table_rain_gaugae + "';";
+    String check_logs_table_exist = String("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '") + database + "' AND TABLE_NAME = '" + table_logs + "';";
     String create_table_water_sensor = String("CREATE TABLE `") + database + "`.`" + table_water_sesnor + "`(`ID` INT NOT NULL AUTO_INCREMENT, `Data_odczytu` DATE NOT NULL, `Godzina_odczytu` TIME NOT NULL,`Wartosc` INT NOT NULL, `Wartosc_tekstowa` VARCHAR(255) NOT NULL, `Alert` VARCHAR(255) NOT NULL, PRIMARY KEY(`ID`))ENGINE = InnoDB;";
-    String create_table_rain_sensor = String("CREATE TABLE `") + database + "`.`" + table_rain_sensor + "`(`ID` INT NOT NULL AUTO_INCREMENT , `Data_odczytu` DATE NOT NULL ,`Godzina_odczytu` TIME NOT NULL, `Wartosc` INT NOT NULL ,PRIMARY KEY (`ID`)) ENGINE = InnoDB;";
-    String create_table_rain_gaugae = String("CREATE TABLE `") + database + "`.`" + table_rain_gaugae + "`(`ID` INT NOT NULL AUTO_INCREMENT , `Data_odczytu` DATE NOT NULL , `Godzina_odczytu` TIME NOT NULL,`Wartosc` INT NOT NULL , `Wartosc_tesktowa` VARCHAR(255) NOT NULL , PRIMARY KEY (`ID`)) ENGINE = InnoDB;";
+    String create_table_rain_gaugae = String("CREATE TABLE `") + database + "`.`" + table_rain_gaugae + "`(`ID` INT NOT NULL AUTO_INCREMENT , `Data_odczytu` DATE NOT NULL ,`Godzina_odczytu` TIME NOT NULL, `Wartosc` INT NOT NULL ,PRIMARY KEY (`ID`)) ENGINE = InnoDB;";
+    String create_table_rain_sensor = String("CREATE TABLE `") + database + "`.`" + table_rain_sensor + "`(`ID` INT NOT NULL AUTO_INCREMENT , `Data_odczytu` DATE NOT NULL , `Godzina_odczytu` TIME NOT NULL,`Wartosc` INT NOT NULL , `Wartosc_tekstowa` VARCHAR(255) NOT NULL , PRIMARY KEY (`ID`)) ENGINE = InnoDB;";
+    String create_table_logs = String("CREATE TABLE `") + database + "`.`" + table_logs + "`(`ID` INT NOT NULL AUTO_INCREMENT , `Data_zdarzenia` DATE NOT NULL , `Godzina_zdarzenia` TIME NOT NULL , `Opis_zdarzenia` VARCHAR(255) NOT NULL , PRIMARY KEY (`ID`)) ENGINE = InnoDB;";
+
     MYSQL_DISPLAY("Checking database tables");
     MYSQL_DISPLAY("Checking water sensor table");
     MYSQL_DISPLAY(check_water_sensor_table_exist);
@@ -311,6 +427,7 @@ void check_tables_database()
         {
             MYSQL_DISPLAY("Table not exists");
             MYSQL_DISPLAY("Creating table water_sensor");
+            MYSQL_DISPLAY(create_table_water_sensor);
             if (!query_mem.execute(create_table_water_sensor.c_str(), true))
             {
                 MYSQL_DISPLAY("Querying error, table not added");
@@ -346,6 +463,7 @@ void check_tables_database()
         {
             MYSQL_DISPLAY("Table not exists");
             MYSQL_DISPLAY("Creating table rain_sensor");
+            MYSQL_DISPLAY(create_table_rain_sensor);
             if (!query_mem.execute(create_table_rain_sensor.c_str(), true))
             {
                 MYSQL_DISPLAY("Querying error, table not added");
@@ -380,8 +498,45 @@ void check_tables_database()
         else
         {
             MYSQL_DISPLAY("Table not exists");
-            MYSQL_DISPLAY("Creating table rain");
+            MYSQL_DISPLAY("Creating table rain gaugae");
+            MYSQL_DISPLAY(create_table_rain_gaugae);
             if (!query_mem.execute(create_table_rain_gaugae.c_str(), true))
+            {
+                MYSQL_DISPLAY("Querying error, table not added");
+                return;
+            }
+            MYSQL_DISPLAY("Table creating");
+            query_mem.close();
+        }
+    }
+    conn.close();
+    connect_to_database_again();
+    MYSQL_DISPLAY("Checking table logs");
+    MYSQL_DISPLAY(check_logs_table_exist);
+    if (!query_mem.execute(check_logs_table_exist.c_str(), true))
+    {
+        MYSQL_DISPLAY("Querying error ");
+        return;
+    }
+    column_names *cols4 = query_mem.get_columns();
+
+    if (cols3->num_fields > 0)
+    {
+        row_values *row4 = query_mem.get_next_row();
+        if (row4 != NULL)
+        {
+            if (String(row4->values[0]) == String(table_logs))
+            {
+                MYSQL_DISPLAY("Table exists");
+                query_mem.close();
+            }
+        }
+        else
+        {
+            MYSQL_DISPLAY("Table not exists");
+            MYSQL_DISPLAY("Creating table logs");
+            MYSQL_DISPLAY(create_table_logs);
+            if (!query_mem.execute(create_table_logs.c_str(), true))
             {
                 MYSQL_DISPLAY("Querying error, table not added");
                 return;
@@ -426,6 +581,30 @@ String get_date()
     String fulldate = String(year) + "-" + String(month) + "-" + String(day);
     return fulldate;
 }
+
+void add_log_power_on_device()
+{
+    String table_logs_insert = String("INSERT INTO `") + database + "`.`" + table_logs + "`( `Data_zdarzenia`, `Godzina_zdarzenia`, `Opis_zdarzenia`) VALUES ('" + get_date() + "','" + get_time() + "','Wlaczenie urzadzenia');";
+    connect_to_database_again();
+    MySQL_Query query_mem = MySQL_Query(&conn);
+    if (conn.connected())
+    {
+        MYSQL_DISPLAY(table_logs_insert);
+        if (!query_mem.execute(table_logs_insert.c_str()))
+        {
+            MYSQL_DISPLAY("Insert error");
+        }
+        else
+        {
+            MYSQL_DISPLAY("Data Inserted.");
+        }
+    }
+    else
+    {
+        MYSQL_DISPLAY("Error server connected");
+    }
+    conn.close();
+}
 /*Setup*/
 void setup()
 {
@@ -438,6 +617,8 @@ void setup()
     check_database_or_create_database();
     delay(1000);
     check_tables_database();
+    delay(1000);
+    add_log_power_on_device();
     delay(1000);
     pin_setup();
     delay(1000);

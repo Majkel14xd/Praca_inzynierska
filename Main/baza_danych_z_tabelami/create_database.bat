@@ -25,7 +25,10 @@ REM Create rain_gauge table
 %MYSQL_EXECUTABLE% -h %MYSQL_HOST% -P %MYSQL_PORT% -u %MYSQL_USER% -p%MYSQL_PASSWORD% -D %DATABASE_NAME% -e "CREATE TABLE IF NOT EXISTS `rain_gaugae` (`ID` INT NOT NULL AUTO_INCREMENT,`Data_odczytu` DATE NOT NULL, `Godzina_odczytu` TIME NOT NULL,`Wartosc` INT NOT NULL,PRIMARY KEY (`ID`)) ENGINE = InnoDB;"
 
 REM Create rain_sensor table
-%MYSQL_EXECUTABLE% -h %MYSQL_HOST% -P %MYSQL_PORT% -u %MYSQL_USER% -p%MYSQL_PASSWORD% -D %DATABASE_NAME% -e "CREATE TABLE IF NOT EXISTS `rain_sensor` (`ID` INT NOT NULL AUTO_INCREMENT,`Data_odczytu` DATE NOT NULL,`Godzina_odczytu` TIME NOT NULL, `Wartosc` INT NOT NULL,`Wartosc_tesktowa` VARCHAR(255) NOT NULL,PRIMARY KEY (`ID`)) ENGINE = InnoDB;"
+%MYSQL_EXECUTABLE% -h %MYSQL_HOST% -P %MYSQL_PORT% -u %MYSQL_USER% -p%MYSQL_PASSWORD% -D %DATABASE_NAME% -e "CREATE TABLE IF NOT EXISTS `rain_sensor` (`ID` INT NOT NULL AUTO_INCREMENT,`Data_odczytu` DATE NOT NULL,`Godzina_odczytu` TIME NOT NULL, `Wartosc` INT NOT NULL,`Wartosc_tekstowa` VARCHAR(255) NOT NULL,PRIMARY KEY (`ID`)) ENGINE = InnoDB;"
+
+REM Create rain_sensor table
+%MYSQL_EXECUTABLE% -h %MYSQL_HOST% -P %MYSQL_PORT% -u %MYSQL_USER% -p%MYSQL_PASSWORD% -D %DATABASE_NAME% -e "CREATE TABLE `rain_measurement_system`.`logs` (`ID` INT NOT NULL AUTO_INCREMENT , `Data_zdarzenia` DATE NOT NULL , `Godzina_zdarzenia` TIME NOT NULL , `Opis_zdarzenia` VARCHAR(255) NOT NULL , PRIMARY KEY (`ID`)) ENGINE = InnoDB;"
 
 REM Confirm completion
 echo Database and tables created successfully.
