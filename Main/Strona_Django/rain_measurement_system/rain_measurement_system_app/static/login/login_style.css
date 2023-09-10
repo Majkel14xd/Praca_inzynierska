@@ -1,0 +1,12 @@
+body {
+  background-image: url("rain.gif");
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #111;
+  width: 100hv;
+  height: 100vh;
+  background-position: center;
+}

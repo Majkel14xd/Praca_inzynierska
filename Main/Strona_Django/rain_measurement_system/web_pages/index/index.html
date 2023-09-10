@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="pl">
   <head>
-    <meta
-      charset="UTF-8"
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="scroll.js"></script>
     <title>System mierzenia opadów wody</title>
     {% load static %}
     <link
@@ -15,13 +13,17 @@
     />
   </head>
   <body>
-    <div class="top-menu">
+    <div id="top-menu">
       <a href="/login/">Zaloguj</a>
-      <a href="/register/">Zarejestruj</a>
       <a href="/admin/">Panel Administratora</a>
-      <a>Kontakt</a>
-      <a>O Stronie</a>
-      <a>O Autorze</a>
+      <a href="#" onclick="scrollostronie(); return false">O Stronie</a>
+      <a href="#" onclick="scrolloautorze(); return false;">O Autorze</a>
     </div>
+    <div id="content">Witaj na stronie monitorowanie opadów deszczu</div>
+    <div id="o_stronie"></div>
+    Strona ma na celu monitorowania opadów deszczu oraz pobieraniu z bazy ich
+    informacji.
+    <div id="o_autorze"></div>
+    Strone przygotował Michał Lidwa.
   </body>
 </html>

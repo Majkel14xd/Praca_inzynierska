@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel kontrolny systemu opadów wody</title>
+    {% load static %}
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href=" {% static 'login/login_style.css' %} "
+    />
+    <body>
+      <div id="top-menu">
+        <a href="/signout" class="btn btn-danger">Wyloguj</a>
+        <a href="/change_password/">Zresetuj hasło</a>
+        <a href="/index" class="btn btn-danger">Do głównej strony</a>
+      </div>
+    </body>
+  </head>
+</html>
