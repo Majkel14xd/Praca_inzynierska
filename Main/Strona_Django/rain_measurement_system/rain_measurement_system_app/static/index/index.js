@@ -13,7 +13,6 @@ function toggleMenu() {
   var topMenu = document.getElementById("top-menu");
   if (topMenu.style.display === "block") {
     topMenu.style.display = "none";
-    topMenu.scrollIntoView({ behavior: "smooth" });
   } else {
     topMenu.style.display = "block";
     topMenu.scrollIntoView({ behavior: "smooth" });
