@@ -11,12 +11,8 @@ from django.contrib.auth import update_session_auth_hash
 
 def index(request):
     if request.user.is_authenticated:
-        # Użytkownik jest zalogowany, przekieruj na inną stronę
-        return redirect(
-            "control_panel"
-        )  # Zaktualizuj 'inna_strona' na nazwę swojego URL-a
+        return redirect("control_panel")
     else:
-        # Użytkownik nie jest zalogowany, możesz dodać tutaj odpowiednią obsługę
         return render(request, "index/index.html")
 
 
@@ -30,9 +26,14 @@ def login(request):
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(
+            request,
+            username=username,
+            password=password,
+        )
         if user is not None:
             auth_login(request, user)
+            request.session["welcome_message"] = f"Witaj {user.username}!"
             return redirect("control_panel")
         else:
             msg = "Błąd logowania, nieprawidłowy login lub hasło"
@@ -44,7 +45,9 @@ def login(request):
 
 
 def control_panel(request):
-    return render(request, "control_panel/control_panel.html")
+    welcome_message = request.session.pop("welcome_message", None)
+    context = {"welcome_message": welcome_message}
+    return render(request, "control_panel/control_panel.html", context)
 
 
 def change_password(request):

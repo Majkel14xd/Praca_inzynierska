@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="scroll.js"></script>
     <title>System mierzenia opadów wody</title>
     {% load static %}
     <link
@@ -11,12 +10,14 @@
       type="text/css"
       href=" {% static 'index/index_style.css' %} "
     />
+    <script src="{% static 'index/index.js' %}"></script>
   </head>
   <body>
+    <div id="menu-toggle" onclick="toggleMenu();">☰ Menu</div>
     <div id="top-menu">
       <a href="/login/">Zaloguj</a>
       <a href="/admin/">Panel Administratora</a>
-      <a href="#" onclick="scrollostronie(); return false">O Stronie</a>
+      <a href="#" onclick="scrollostronie(); return false;">O Stronie</a>
       <a href="#" onclick="scrolloautorze(); return false;">O Autorze</a>
     </div>
     <div id="content">Witaj na stronie monitorowanie opadów deszczu</div>

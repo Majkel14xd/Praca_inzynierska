@@ -18,7 +18,7 @@
         {% csrf_token %} {{ form.as_p }}
         <button type="submit">Zaloguj</button>
         {% if msg %}
-        <p>{{ msg }}</p>
+        <p id="login_message">{{ msg }}</p>
         {% endif %}
       </form>
     </div>

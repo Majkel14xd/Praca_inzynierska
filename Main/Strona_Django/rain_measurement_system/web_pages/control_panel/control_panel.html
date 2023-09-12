@@ -15,6 +15,9 @@
         <a href="/signout" class="btn btn-danger">Wyloguj</a>
         <a href="/change_password/">Zresetuj hasło</a>
         <a href="/index" class="btn btn-danger">Do głównej strony</a>
+        {% if welcome_message %}
+        <p id="welcome_message">{{ welcome_message }}</p>
+        {% endif %}
       </div>
     </body>
   </head>
