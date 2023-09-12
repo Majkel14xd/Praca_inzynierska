@@ -56,7 +56,7 @@ body {
   }
   #menu-toggle {
     display: block;
-    float: left;
+    float: center;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -65,6 +65,7 @@ body {
     font-weight: 200;
   }
   #top-menu a {
+    float: center;
     display: block;
     padding: 14px 16px;
     text-decoration: none;
