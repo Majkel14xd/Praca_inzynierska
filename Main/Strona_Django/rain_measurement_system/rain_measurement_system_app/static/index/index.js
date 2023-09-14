@@ -15,6 +15,5 @@ function toggleMenu() {
     topMenu.style.display = "none";
   } else {
     topMenu.style.display = "block";
-    topMenu.scrollIntoView({ behavior: "smooth" });
   }
 }

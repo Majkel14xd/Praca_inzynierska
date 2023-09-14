@@ -8,18 +8,23 @@
     <link
       rel="stylesheet"
       type="text/css"
-      href=" {% static 'login/login_style.css' %} "
+      href="{% static 'login/login_style.css' %}"
     />
   </head>
   <body>
     <div id="logowanie-napis">Zaloguj sie do systemu mierzenia opadów</div>
     <div id="login-panel">
       <form method="POST">
-        {% csrf_token %} {{ form.as_p }}
-        <button type="submit">Zaloguj</button>
+        {% csrf_token %}
+        <p>Login: {{ form.username }}</p>
+        <p>Hasło: {{ form.password }}</p>
+        <button type="submit" id="zaloguj_button">Zaloguj</button>
         {% if msg %}
         <p id="login_message">{{ msg }}</p>
         {% endif %}
+      </form>
+      <form action="/">
+        <button type="submit" id="powrot">Powrót</button>
       </form>
     </div>
   </body>

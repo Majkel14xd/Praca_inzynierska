@@ -22,7 +22,7 @@ def indexafterlogin(request):
 
 def login(request):
     if request.user.is_authenticated:
-        return render(request, "control_panel/control_panel.html")
+        return redirect("control_panel")
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
@@ -68,3 +68,7 @@ def change_password(request):
 def signout(request):
     logout(request)
     return redirect("index")
+
+
+def profile(request):
+    return render(request, "profile/profile.html")

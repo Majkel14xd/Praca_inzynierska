@@ -10,3 +10,47 @@ body {
   height: 100vh;
   background-position: center;
 }
+
+form {
+  float: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+}
+
+#zaloguj_button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  float: center;
+}
+
+#login_message {
+  color: red;
+  margin-top: 10px;
+}
+
+#logowanie-napis {
+  width: 100%;
+  height: 200px;
+  text-align: center;
+  font-size: 50px;
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+#powrot {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  float: center;
+}

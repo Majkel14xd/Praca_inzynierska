@@ -28,4 +28,5 @@ urlpatterns = [
     path("change_password/", views.change_password, name="change_password"),
     path("signout/", views.signout, name="signout"),
     path("index/", views.indexafterlogin, name="indexafterlogin"),
+    path("profile/", views.profile, name="profile"),
 ]
