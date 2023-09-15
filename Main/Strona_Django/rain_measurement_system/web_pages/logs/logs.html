@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Logi</title>
+    {% load static %}
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href=" {% static 'logs/logs.css' %} "
+    />
+  </head>
+  <body>
+    <h1>Logi</h1>
+    <form method="POST">
+      {% csrf_token %} {{ form.as_p }}
+      <button type="submit">Szukaj</button>
+    </form>
+    <table>
+      <tr>
+        <th>Data</th>
+        <th>Godzina</th>
+        <th>Treść logu</th>
+      </tr>
+      {% if logs %} {% for log in logs %}
+      <tr>
+        <td>{{ log.Data_zdarzenia }}</td>
+        <td>{{ log.Godzina_zdarzenia }}</td>
+        <td>{{ log.Opis_zdarzenia }}</td>
+      </tr>
+      {% endfor %} {% else %}
+      <tr>
+        <td colspan="3">Brak wyników</td>
+      </tr>
+      {% endif %}
+    </table>
+  </body>
+</html>

@@ -7,6 +7,8 @@ from django.shortcuts import HttpResponseRedirect
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
+from .models import Logs
+from .forms import LogsForm
 
 
 def index(request):
@@ -56,10 +58,10 @@ def change_password(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
-            messages.success(request, ("Your password was successfully updated!"))
+            messages.success(request, ("Hasło zostało zakutalizowane!"))
             return redirect("change_password")
         else:
-            messages.error(request, ("Please correct the error below."))
+            messages.error(request, ("Bład w aktualizowaniu hasła."))
     else:
         form = PasswordChangeForm(request.user)
     return render(request, "change_password/change_password.html", {"form": form})
@@ -72,3 +74,17 @@ def signout(request):
 
 def profile(request):
     return render(request, "profile/profile.html")
+
+
+def logs(request):
+    logs = None
+    if request.method == "POST":
+        form = LogsForm(request.POST)
+        if form.is_valid():
+            date_from = form.cleaned_data["date_from"]
+            date_to = form.cleaned_data["date_to"]
+            logs = Logs.objects.filter(Data_zdarzenia__range=(date_from, date_to))
+
+    else:
+        form = LogsForm()
+    return render(request, "logs/logs.html", {"form": form, "logs": logs})
