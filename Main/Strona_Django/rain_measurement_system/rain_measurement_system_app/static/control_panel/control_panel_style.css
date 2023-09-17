@@ -1,0 +1,144 @@
+body {
+  background-color: grey;
+  margin: 0;
+  padding: 0;
+}
+#top_menu {
+  background-color: green;
+  width: 85%;
+  height: 10vh;
+  display: block;
+  float: right;
+}
+
+#top_menu a {
+  float: right;
+  display: block;
+  text-align: center;
+  margin-left: 10px;
+  margin-right: 10px;
+  text-decoration: none;
+  color: blue;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 200;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#top_menu a:hover {
+  background-color: rgba(4, 186, 192, 0.1);
+}
+
+#left_menu {
+  background-color: aqua;
+  width: 15%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-top: 30vh;
+}
+
+#left_menu a {
+  float: center;
+  display: block;
+  text-decoration: none;
+  color: blue;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 200;
+  width: 100%;
+  border: 1px;
+  border-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+#welcome_message {
+  text-align: center;
+  color: white;
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+#content {
+  float: right;
+  width: 85%;
+  height: 100hv;
+}
+
+.container {
+  width: 200px; /* Zmniejsz szerokość o połowę */
+  height: 100px; /* Zmniejsz wysokość o połowę */
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  overflow: hidden;
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+.gauge-a {
+  z-index: 1;
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.2);
+  width: 200px; /* Zmniejsz szerokość o połowę */
+  height: 100px; /* Zmniejsz wysokość o połowę */
+  top: 0%;
+  border-radius: 100px 100px 0px 0px; /* Odpowiednio dostosuj zaokrąglenia */
+}
+
+.gauge-b {
+  z-index: 3;
+  position: absolute;
+  background-color: #222;
+  width: 125px; /* Zmniejsz szerokość o połowę */
+  height: 62.5px; /* Zmniejsz wysokość o połowę */
+  top: 37.5px; /* Zmniejsz o połowę */
+  margin-left: 37.5px; /* Zmniejsz o połowę */
+  margin-right: auto;
+  border-radius: 100px 100px 0px 0px; /* Odpowiednio dostosuj zaokrąglenia */
+}
+
+.gauge-c {
+  z-index: 2;
+  position: absolute;
+  background-color: #5664f9;
+  width: 200px; /* Zmniejsz szerokość o połowę */
+  height: 100px; /* Zmniejsz wysokość o połowę */
+  top: 100px; /* Zmniejsz o połowę */
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 0px 0px 100px 100px; /* Odpowiednio dostosuj zaokrąglenia */
+  transform-origin: center top;
+  transition: all 1.3s ease-in-out;
+}
+
+.container:hover .gauge-c {
+  transform: rotate(0.5turn);
+}
+
+.container:hover .gauge-data {
+  color: rgba(255, 255, 255, 1);
+}
+
+.gauge-data {
+  z-index: 4;
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 1.5em;
+  line-height: 25px;
+  position: absolute;
+  width: 200px; /* Zmniejsz szerokość o połowę */
+  height: 100px; /* Zmniejsz wysokość o połowę */
+  top: 45px; /* Zmniejsz o połowę */
+  margin-left: auto;
+  margin-right: auto;
+  transition: all 1s ease-out;
+}
+
+#percent {
+  font-size: 20px;
+}

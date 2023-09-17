@@ -9,6 +9,9 @@ from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from .models import Logs
 from .forms import LogsForm
+from django.http import HttpResponse
+from .tasks import *
+from django.http import JsonResponse
 
 
 def index(request):
@@ -48,11 +51,19 @@ def login(request):
 
 def control_panel(request):
     welcome_message = request.session.pop("welcome_message", None)
-    context = {"welcome_message": welcome_message}
+    get_water_sensor_data = (
+        water_sensor_data_api()
+    )  # Wywołujemy funkcję fetch_data_from_api() i przechowujemy odpowiedź w zmiennej response
+    context = {
+        "welcome_message": welcome_message,
+        "get_water_sensor_data": get_water_sensor_data,
+    }  # Dodajemy response do kontekstu
     return render(request, "control_panel/control_panel.html", context)
 
 
 def change_password(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
     if request.method == "POST":
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
@@ -73,18 +84,44 @@ def signout(request):
 
 
 def profile(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
     return render(request, "profile/profile.html")
 
 
 def logs(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
     logs = None
     if request.method == "POST":
         form = LogsForm(request.POST)
         if form.is_valid():
             date_from = form.cleaned_data["date_from"]
             date_to = form.cleaned_data["date_to"]
-            logs = Logs.objects.filter(Data_zdarzenia__range=(date_from, date_to))
-
+            logs = Logs.objects.filter(data_zdarzenia__range=(date_from, date_to))
     else:
         form = LogsForm()
     return render(request, "logs/logs.html", {"form": form, "logs": logs})
+
+
+def database_from_mysql(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
+    return render(request, "database_from_mysql/database_from_mysql.html")
+
+
+def device_info(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
+    return render(request, "device_info/device_info.html")
+
+
+def settings(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
+    return render(request, "settings/settings.html")
+
+
+def water_sensor_data(request):
+    get_water_sensor_data = water_sensor_data_api()  # Pobierz nową wartość response
+    return JsonResponse({"get_water_sensor_data": get_water_sensor_data})
