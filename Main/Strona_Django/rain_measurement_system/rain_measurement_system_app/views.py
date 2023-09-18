@@ -50,14 +50,14 @@ def login(request):
 
 
 def control_panel(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
     welcome_message = request.session.pop("welcome_message", None)
-    get_water_sensor_data = (
-        water_sensor_data_api()
-    )  # Wywołujemy funkcję fetch_data_from_api() i przechowujemy odpowiedź w zmiennej response
+    get_water_sensor_data = water_sensor_data_api()
     context = {
         "welcome_message": welcome_message,
         "get_water_sensor_data": get_water_sensor_data,
-    }  # Dodajemy response do kontekstu
+    }
     return render(request, "control_panel/control_panel.html", context)
 
 
@@ -123,5 +123,7 @@ def settings(request):
 
 
 def water_sensor_data(request):
-    get_water_sensor_data = water_sensor_data_api()  # Pobierz nową wartość response
+    if not request.user.is_authenticated:
+        return redirect("login")
+    get_water_sensor_data = water_sensor_data_api()
     return JsonResponse({"get_water_sensor_data": get_water_sensor_data})
