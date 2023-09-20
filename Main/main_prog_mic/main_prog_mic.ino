@@ -45,10 +45,6 @@ char table_rain_sensor[] = "rain_sensor";
 char table_logs[] = "logs";
 int status_rain_sensor_pin_virtual = 1;
 int status_water_sensor_pin_virtual = 1;
-int water_sensor_value = 0;
-int rain_sesnor_value = 0;
-int capacitygaugae = 1000;
-int funnelsize = 10;
 uint16_t server_port = 3306;
 
 /*Objects*/
@@ -143,6 +139,7 @@ BLYNK_WRITE(RAIN_SENSOR_POWER_ON_OFF)
 /*Owns Functions*/
 void rain_sensor()
 {
+    int rain_sesnor_value = 0;
     String rain_sesnor_insert;
     rain_sesnor_value = analogRead(RAIN_SENSOR_ANALOG_PIN);
     Blynk.virtualWrite(RAIN_SENSOR_VALUE, rain_sesnor_value);
@@ -150,13 +147,13 @@ void rain_sensor()
     Serial.println(rain_sesnor_value);
     if (status_rain_sensor_pin_virtual == 1)
     {
-        if (rain_sesnor_value > 1000)
+        if (rain_sesnor_value > 4095)
         {
             Serial.println("Brak opadow");
             Blynk.virtualWrite(RAIN_SENSOR_TEXT_VALUE, "Brak opadow");
             rain_sesnor_insert = String("INSERT INTO `") + database + "`.`" + table_rain_sensor + "`(Data_odczytu, Godzina_odczytu, Wartosc, Wartosc_tekstowa) VALUES ('" + get_date() + "','" + get_time() + "','" + rain_sesnor_value + "','Brak opadow');";
         }
-        else if (rain_sesnor_value < 1000 && rain_sesnor_value >= 512)
+        else if (rain_sesnor_value < 4095 && rain_sesnor_value >= 2048)
         {
             Serial.println("Slabe opady");
             Blynk.virtualWrite(RAIN_SENSOR_TEXT_VALUE, "Slabe opady");
@@ -198,24 +195,44 @@ void rain_sensor()
 
 void rain_gaugae()
 {
-
+    const float onehumltocm = 1.18;
+    const float ml_to_cm = 100.0 / onehumltocm;
+    const float max_height_gaugae = 11.8;
+    const float funnel_area = 3.14159 * pow((12.5 / 2) / 100, 2);
     digitalWrite(TRIG_PIN_ULTR_SONIC_SENSOR, LOW);
     delayMicroseconds(2);
     digitalWrite(TRIG_PIN_ULTR_SONIC_SENSOR, HIGH);
     delayMicroseconds(10);
     digitalWrite(TRIG_PIN_ULTR_SONIC_SENSOR, LOW);
-    unsigned int distance = sonar.ping_cm();
 
-    int waterLevelgauge = capacitygaugae - (capacitygaugae * distance) / 100;
+    unsigned long duration = pulseIn(ECHO_PIN_ULTR_SONIC_SENSOR, HIGH);
+
+    float distance = duration * 0.0343 / 2.0;
+
+    if (distance == 0 || distance > max_height_gaugae)
+    {
+
+        distance = 0;
+    }
+
+    float volume = distance * ml_to_cm;
+
+    if (distance > 0 && distance < max_height_gaugae)
+    {
+        volume = (max_height_gaugae - distance) * ml_to_cm;
+    }
+
+    float volumeL = volume / 1000;
+
+    float rainlevel = volumeL / funnel_area; // l/m²
 
     Serial.print("Odległość: ");
     Serial.print(distance);
-    Serial.print(" cm, Poziom wody: ");
-    Serial.print(waterLevelgauge);
-    Serial.print(" ml");
-    int rainlevel = waterLevelgauge * funnelsize;
-    Serial.println(" Poziom deszczu wynosi: ");
+    Serial.print(" cm, Objętość wody: ");
+    Serial.print(volumeL);
+    Serial.print(" l, Ilość opadów: ");
     Serial.print(rainlevel);
+    Serial.println(" l/m²");
     Blynk.virtualWrite(RAIN_GAUGE_VALUE, rainlevel);
     String rain_gaugae_insert = String("INSERT INTO `") + database + "`.`" + table_rain_gaugae + "`(`Data_odczytu`, `Godzina_odczytu`, `Wartosc`) VALUES ('" + get_date() + "','" + get_time() + "','" + rainlevel + "');";
     connect_to_database_again();
@@ -242,6 +259,7 @@ void rain_gaugae()
 
 void water_sensor()
 {
+    int water_sensor_value = 0;
     water_sensor_value = analogRead(WATER_SESNOR_ANALOG_PIN);
     Blynk.virtualWrite(WATER_SENSOR_VALUE, water_sensor_value);
     Serial.print("Stan czujnika wody wynosi: ");
@@ -249,7 +267,7 @@ void water_sensor()
     String water_sesnor_insert;
     if (status_water_sensor_pin_virtual == 1)
     {
-        if (water_sensor_value <= 10)
+        if (water_sensor_value <= 0)
         {
             Blynk.virtualWrite(WATER_SENSOR_TEXT_VALUE, "Poziom niski zbiornika");
             Serial.println("Poziom niski zbiornika");
@@ -257,7 +275,7 @@ void water_sensor()
             Serial.println("Zbiornik jeszcze nie do oproznienia");
             water_sesnor_insert = String("INSERT INTO `") + database + "`.`" + table_water_sesnor + "`(Data_odczytu, Godzina_odczytu, Wartosc, Wartosc_tekstowa, Alert) VALUES ('" + get_date() + "','" + get_time() + "','" + water_sensor_value + "','Poziom niski zbiornika','Zbiornik jeszcze nie do oproznienia');";
         }
-        else if (water_sensor_value >= 11 && water_sensor_value <= 400)
+        else if (water_sensor_value >= 1 && water_sensor_value <= 2100)
         {
             Blynk.virtualWrite(WATER_SENSOR_TEXT_VALUE, "Poziom wysoki zbiornika");
             Serial.println("Poziom wysoki zbiornika");
