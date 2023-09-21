@@ -336,10 +336,8 @@ void pin_setup()
 void blynk_setup_and_virtual_pins()
 {
     Blynk.begin(BLYNK_AUTH_TOKEN, ssid, pass);
-    Blynk.virtualWrite(V0, 1);
-    Blynk.virtualWrite(V1, 1);
-    Blynk.virtualWrite(V2, 1);
-    Blynk.virtualWrite(V3, 1);
+    Blynk.virtualWrite(WATER_SENSOR_POWER_ON_OFF, 1);
+    Blynk.virtualWrite(RAIN_SENSOR_POWER_ON_OFF, 1);
 }
 void connect_wifi_to_database()
 {
@@ -577,6 +575,11 @@ void connect_to_database_again()
         MYSQL_DISPLAY("Connecting to database unsuccessful");
     }
 }
+void set_time_and_date()
+{
+    timeClient.begin();
+    timeClient.setTimeOffset(7200);
+}
 String get_time()
 {
     timeClient.update();
@@ -636,13 +639,13 @@ void setup()
     delay(1000);
     check_tables_database();
     delay(1000);
+    set_time_and_date();
+    delay(1000);
     add_log_power_on_device();
     delay(1000);
     pin_setup();
     delay(1000);
     blynk_setup_and_virtual_pins();
-    timeClient.begin();
-    timeClient.setTimeOffset(7200);
     timer.setInterval(10000L, water_sensor);
     timer.setInterval(10000L, rain_sensor);
     timer.setInterval(30000L, rain_gaugae);
