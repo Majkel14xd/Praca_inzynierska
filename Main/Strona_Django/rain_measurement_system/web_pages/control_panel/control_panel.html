@@ -18,17 +18,21 @@
       <a href="/signout/">Wyloguj</a>
       <a href="/index">Do głównej strony</a>
     </div>
-    <div id="content">
-      {% if welcome_message %}
-      <p id="welcome_message">{{ welcome_message }}</p>
-      {% endif %}
-      <p id="get_water_sensor_data">{{get_water_sensor_data }}</p>
-      <div class="gauge">
-        <div class="gauge__body">
-          <div class="gauge__fill"></div>
-          <div class="gauge__cover"></div>
-        </div>
+    <div class="content_main_control_panel">
+      <div class="column" id="water_sensor">
+        <p id="get_water_sensor_data">{{get_water_sensor_data }}</p>
+        <label class="switch">
+          <input type="checkbox" />
+          <span class="slider round"></span>
+        </label>
       </div>
+      <div class="column" id="rain_sensor">
+        <label class="switch">
+          <input type="checkbox" />
+          <span class="slider round"></span>
+        </label>
+      </div>
+      <div class="column" id="rain_gaugae"></div>
     </div>
     <div id="left_menu">
       <a href="/control_panel/">Panel kontrolny</a>
@@ -37,6 +41,9 @@
       <a href="/control_panel/logs/">Logi</a>
       <a href="/control_panel/device_info/">O urządzeniu</a>
       <a href="/control_panel/settings/">Ustawienia</a>
+      {% if welcome_message %}
+      <p id="welcome_message">{{ welcome_message }}</p>
+      {% endif %}
     </div>
   </body>
 </html>
