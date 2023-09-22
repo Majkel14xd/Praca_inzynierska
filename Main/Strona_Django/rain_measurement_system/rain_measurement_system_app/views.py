@@ -8,10 +8,13 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from .models import Logs
-from .forms import LogsForm
+from .forms import *
 from django.http import HttpResponse
 from .tasks import *
 from django.http import JsonResponse
+BLYNK_AUTH_TOKEN = "vnEDWHA3KRFwm91ji5MNPcojZgo1NfOT"
+WATER_SENSOR_POWER_ON_OFF = "V0"
+RAIN_SENSOR_POWER_ON_OFF = "V1"
 
 
 def index(request):
@@ -98,7 +101,8 @@ def logs(request):
         if form.is_valid():
             date_from = form.cleaned_data["date_from"]
             date_to = form.cleaned_data["date_to"]
-            logs = Logs.objects.filter(data_zdarzenia__range=(date_from, date_to))
+            logs = Logs.objects.filter(
+                data_zdarzenia__range=(date_from, date_to))
     else:
         form = LogsForm()
     return render(request, "logs/logs.html", {"form": form, "logs": logs})

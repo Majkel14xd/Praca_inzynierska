@@ -12,3 +12,4 @@ class LogsForm(forms.Form):
         widget=forms.DateInput(attrs={"type": "date"}),
         input_formats=["%Y-%m-%d"],
     )
+
