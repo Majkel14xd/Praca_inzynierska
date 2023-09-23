@@ -1,0 +1,180 @@
+body {
+  background-color: grey;
+  margin: 0;
+  padding: 0;
+}
+#top_menu {
+  background-color: green;
+  width: 85%;
+  height: 10vh;
+  display: block;
+  float: right;
+}
+
+#top_menu a {
+  float: right;
+  display: block;
+  text-align: center;
+  margin-left: 10px;
+  margin-right: 10px;
+  text-decoration: none;
+  color: blue;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 200;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#top_menu a:hover {
+  background-color: rgba(4, 186, 192, 0.1);
+}
+
+#left_menu {
+  background-color: aqua;
+  width: 15%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-top: 30vh;
+}
+
+#left_menu a {
+  float: center;
+  display: block;
+  text-decoration: none;
+  color: blue;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 200;
+  width: 100%;
+  border: 1px;
+  border-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+#welcome_message {
+  text-align: center;
+  color: white;
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+#content {
+  float: right;
+  width: 85%;
+  height: 100hv;
+}
+.content_main_control_panel {
+  float: right;
+  width: 85%;
+  height: 100%;
+  display: flex;
+}
+.column {
+  flex-grow: 1;
+}
+
+#water_sensor {
+  background-color: white;
+}
+#rain_sensor {
+  background-color: gold;
+}
+#rain_gaugae {
+  background-color: blue;
+}
+
+input[type="checkbox"] {
+  height: 0;
+  width: 0;
+  visibility: hidden;
+}
+
+label {
+  cursor: pointer;
+  text-indent: -9999px;
+  width: 100px; /* Reduced width to half */
+  height: 50px; /* Reduced height to half */
+  background: grey;
+  display: block;
+  border-radius: 25px; /* Reduced border-radius to half */
+  position: relative;
+}
+
+label:after {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 40px; /* Reduced width to half */
+  height: 40px; /* Reduced height to half */
+  background: #fff;
+  border-radius: 20px; /* Reduced border-radius to half */
+  transition: 0.3s;
+}
+
+input:checked + label {
+  background: #bada55;
+}
+
+input:checked + label:after {
+  left: calc(100% - 5px);
+  transform: translateX(-100%);
+}
+
+label:active:after {
+  width: 65px; /* Reduced width to half */
+}
+.gauge {
+  width: 100%;
+  max-width: 250px;
+  font-family: "Roboto", sans-serif;
+  font-size: 32px;
+  color: #004033;
+}
+
+.gauge__body {
+  width: 100%;
+  height: 0;
+  padding-bottom: 50%;
+  background: #b4c0be;
+  position: relative;
+  border-top-left-radius: 100% 200%;
+  border-top-right-radius: 100% 200%;
+  overflow: hidden;
+}
+
+.gauge__fill {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: inherit;
+  height: 100%;
+  background: #009578;
+  transform-origin: center top;
+  transform: rotate(0.25turn);
+  transition: transform 0.2s ease-out;
+}
+
+.gauge__cover {
+  width: 75%;
+  height: 150%;
+  background: #ffffff;
+  border-radius: 50%;
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  /* Text */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 25%;
+  box-sizing: border-box;
+}

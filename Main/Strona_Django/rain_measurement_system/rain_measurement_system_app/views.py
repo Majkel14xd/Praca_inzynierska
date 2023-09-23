@@ -12,9 +12,6 @@ from .forms import *
 from django.http import HttpResponse
 from .tasks import *
 from django.http import JsonResponse
-BLYNK_AUTH_TOKEN = "vnEDWHA3KRFwm91ji5MNPcojZgo1NfOT"
-WATER_SENSOR_POWER_ON_OFF = "V0"
-RAIN_SENSOR_POWER_ON_OFF = "V1"
 
 
 def index(request):
@@ -92,20 +89,44 @@ def profile(request):
     return render(request, "profile/profile.html")
 
 
+from django.shortcuts import render, redirect
+from .forms import (
+    LogsForm,
+)
+
+
 def logs(request):
     if not request.user.is_authenticated:
         return redirect("login")
+
     logs = None
+
     if request.method == "POST":
         form = LogsForm(request.POST)
         if form.is_valid():
             date_from = form.cleaned_data["date_from"]
             date_to = form.cleaned_data["date_to"]
-            logs = Logs.objects.filter(
-                data_zdarzenia__range=(date_from, date_to))
+            logs = Logs.objects.filter(data_zdarzenia__range=(date_from, date_to))
     else:
         form = LogsForm()
-    return render(request, "logs/logs.html", {"form": form, "logs": logs})
+
+    if logs:
+        data_exists = True
+        msg_data_empty = ""
+    else:
+        data_exists = False
+        msg_data_empty = "Brak danych albo nie uzupełniona dobrze data szukania"
+
+    return render(
+        request,
+        "logs/logs.html",
+        {
+            "form": form,
+            "logs": logs,
+            "data_exists": data_exists,
+            "msg_data_empty": msg_data_empty,
+        },
+    )
 
 
 def database_from_mysql(request):
@@ -131,3 +152,17 @@ def water_sensor_data(request):
         return redirect("login")
     get_water_sensor_data = water_sensor_data_api()
     return JsonResponse({"get_water_sensor_data": get_water_sensor_data})
+
+
+def rain_sensor_data(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
+    get_rain_sensor_data = rain_sensor_data_api()
+    return JsonResponse({"get_rain_sensor_data": get_rain_sensor_data})
+
+
+def rain_gauge_data(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
+    get_rain_gauge_data = rain_gauge_data_api()
+    return JsonResponse({"get_rain_gauge_data": get_rain_gauge_data})

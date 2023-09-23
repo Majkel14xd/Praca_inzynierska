@@ -41,5 +41,15 @@ urlpatterns = [
     ),
     path("control_panel/device_info/", views.device_info, name="device_info"),
     path("control_panel/settings/", views.settings, name="settings"),
-    path("water_sensor_data/", views.water_sensor_data, name="water_sensor_data"),
+    path(
+        "water_sensor_data/",
+        views.water_sensor_data,
+        name="water_sensor_data",
+    ),
+    path(
+        "rain_sensor_data/",
+        views.rain_sensor_data,
+        name="rain_sensor_data",
+    ),
+    path("rain_gauge_data/", views.rain_gauge_data, name="rain_gauge_data"),
 ]

@@ -10,6 +10,11 @@
       type="text/css"
       href=" {% static 'control_panel/control_panel_style.css' %} "
     />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href=" {% static 'logs/logs_style.css' %} "
+    />
   </head>
   <body>
     <div id="top_menu">
@@ -17,12 +22,13 @@
       <a href="/index">Do głównej strony</a>
     </div>
     <div id="content">
-      <h1>Logi</h1>
+      <h1 id="napis_logi">Logi</h1>
       <form method="POST">
         {% csrf_token %} {{ form.as_p }}
         <button type="submit">Szukaj</button>
       </form>
-      <table>
+      {% if data_exists %}
+      <table id="table_log">
         <tr>
           <th>Data</th>
           <th>Godzina</th>
@@ -36,10 +42,58 @@
         </tr>
         {% endfor %} {% else %}
         <tr>
-          <td colspan="3">Brak wyników</td>
+          <td colspan="3"></td>
         </tr>
         {% endif %}
       </table>
+      {% else %}
+      <p id="msg_data_empty">{{msg_data_empty }}</p>
+      {% endif %}
+      <div id="pagination">
+        <button id="prevPage">Poprzednia</button>
+        <button id="nextPage">Następna</button>
+      </div>
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const table = document.getElementById("table_log");
+          const prevButton = document.getElementById("prevPage");
+          const nextButton = document.getElementById("nextPage");
+
+          const rowsPerPage = 7;
+          let currentPage = 1;
+
+          // Funkcja wyświetlająca dane na podstawie numeru strony
+          function displayPage(page) {
+            const startIndex = (page - 1) * rowsPerPage;
+            const endIndex = page * rowsPerPage;
+
+            for (let i = 1; i < table.rows.length; i++) {
+              table.rows[i].style.display =
+                i > startIndex && i <= endIndex ? "table-row" : "none";
+            }
+          }
+
+          // Obsługa przycisków "Poprzednia" i "Następna"
+          prevButton.addEventListener("click", function () {
+            if (currentPage > 1) {
+              currentPage--;
+              displayPage(currentPage);
+            }
+          });
+
+          nextButton.addEventListener("click", function () {
+            if (
+              currentPage < Math.ceil((table.rows.length - 1) / rowsPerPage)
+            ) {
+              currentPage++;
+              displayPage(currentPage);
+            }
+          });
+
+          // Wyświetl pierwszą stronę przy załadowaniu
+          displayPage(currentPage);
+        });
+      </script>
     </div>
     <div id="left_menu">
       <a href="/control_panel/">Panel kontrolny</a>
