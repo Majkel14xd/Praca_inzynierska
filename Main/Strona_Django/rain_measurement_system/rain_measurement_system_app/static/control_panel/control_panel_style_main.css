@@ -71,12 +71,13 @@ body {
 }
 .content_main_control_panel {
   float: right;
-  width: 85%;
-  height: 100%;
   display: flex;
+  width: 85%;
+  flex-direction: column;
 }
+
 .column {
-  flex-grow: 1;
+  flex: 1;
 }
 
 #water_sensor {

@@ -7,7 +7,7 @@ from django.shortcuts import HttpResponseRedirect
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
-from .models import Logs
+from .models import *
 from .forms import *
 from django.http import HttpResponse
 from .tasks import *
@@ -100,39 +100,62 @@ def logs(request):
         return redirect("login")
 
     logs = None
-
+    msg_data_empty = ""
     if request.method == "POST":
         form = LogsForm(request.POST)
         if form.is_valid():
             date_from = form.cleaned_data["date_from"]
             date_to = form.cleaned_data["date_to"]
             logs = Logs.objects.filter(data_zdarzenia__range=(date_from, date_to))
+            if not logs:
+                msg_data_empty = "Brak danych albo nie uzupełniona dobrze data szukania"
     else:
         form = LogsForm()
-
-    if logs:
-        data_exists = True
-        msg_data_empty = ""
-    else:
-        data_exists = False
-        msg_data_empty = "Brak danych albo nie uzupełniona dobrze data szukania"
-
-    return render(
-        request,
-        "logs/logs.html",
-        {
-            "form": form,
-            "logs": logs,
-            "data_exists": data_exists,
-            "msg_data_empty": msg_data_empty,
-        },
-    )
+    context = {
+        "form": form,
+        "logs": logs,
+        "msg_data_empty": msg_data_empty,
+    }
+    return render(request, "logs/logs.html", context)
 
 
 def database_from_mysql(request):
     if not request.user.is_authenticated:
         return redirect("login")
-    return render(request, "database_from_mysql/database_from_mysql.html")
+
+    data = None  
+    message = ""
+    if request.method == "POST":
+        form = Datafrommuysqlform(request.POST)
+        if form.is_valid():
+            model = form.cleaned_data["model"]
+            date_from = form.cleaned_data["date_from"]
+            date_to = form.cleaned_data["date_to"]
+            if model == "rain_gauge":
+                data = RainGaugae.objects.filter(
+                    data_odczytu__range=(date_from, date_to),
+                )
+            elif model == "rain_sensor":
+                data = RainSensor.objects.filter(
+                    data_odczytu__range=(date_from, date_to),
+                )
+            elif model == "water_sensor":
+                data = WaterSensor.objects.filter(
+                    data_odczytu__range=(date_from, date_to),
+                )
+            if not data:
+                message = "Brak dostępnych danych w wybranym zakresie."
+
+    else:
+        form = Datafrommuysqlform()
+
+    context = {
+        "form": form,
+        "data": data,
+        "message": message,  
+    }
+
+    return render(request, "database_from_mysql/database_from_mysql.html", context)
 
 
 def device_info(request):

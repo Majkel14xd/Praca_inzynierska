@@ -28,7 +28,7 @@
         {% csrf_token %} {{ form.as_p }}
         <button type="submit">Szukaj</button>
       </form>
-      {% if data_exists %}
+      {% if logs %}
       <table id="table_log">
         <tr>
           <th>Data</th>
@@ -44,8 +44,8 @@
         {% endfor %} {% else %}
         <tr>
           <td colspan="3"></td>
+          {% endif %}
         </tr>
-        {% endif %}
       </table>
       {% else %}
       <p id="msg_data_empty">{{msg_data_empty }}</p>
@@ -54,7 +54,6 @@
         <button id="prevPage">Poprzednia</button>
         <button id="nextPage">Następna</button>
       </div>
-      <script></script>
     </div>
     <div id="left_menu">
       <a href="/control_panel/">Panel kontrolny</a>

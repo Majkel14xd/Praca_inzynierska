@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const table = document.getElementById("table_log");
+  const table = document.getElementById("table_data");
   const prevButton = document.getElementById("prevPage");
   const nextButton = document.getElementById("nextPage");
 
@@ -11,8 +11,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const endIndex = page * rowsPerPage;
 
     for (let i = 1; i < table.rows.length; i++) {
-      table.rows[i].style.display =
-        i > startIndex && i <= endIndex ? "table-row" : "none";
+      if (i > startIndex && i <= endIndex) {
+        table.rows[i].style.display = "table-row";
+      } else {
+        table.rows[i].style.display = "none";
+      }
     }
   }
 
@@ -24,7 +27,8 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   nextButton.addEventListener("click", function () {
-    if (currentPage < Math.ceil((table.rows.length - 1) / rowsPerPage)) {
+    const totalPages = Math.ceil((table.rows.length - 1) / rowsPerPage);
+    if (currentPage < totalPages) {
       currentPage++;
       displayPage(currentPage);
     }
