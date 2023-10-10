@@ -43,6 +43,7 @@ char table_water_sesnor[] = "water_sensor";
 char table_rain_gaugae[] = "rain_gaugae";
 char table_rain_sensor[] = "rain_sensor";
 char table_logs[] = "logs";
+char table_device_info[] = "device_info";
 int status_rain_sensor_pin_virtual = 1;
 int status_water_sensor_pin_virtual = 1;
 uint16_t server_port = 3306;
@@ -224,7 +225,7 @@ void rain_gaugae()
 
     float volumeL = volume / 1000;
 
-    float rainlevel = volumeL / funnel_area; // l/m²
+    float rainlevel = volumeL / funnel_area;
 
     Serial.print("Odległość: ");
     Serial.print(distance);
@@ -612,6 +613,29 @@ void add_log_power_on_device()
     {
         MYSQL_DISPLAY(table_logs_insert);
         if (!query_mem.execute(table_logs_insert.c_str()))
+        {
+            MYSQL_DISPLAY("Insert error");
+        }
+        else
+        {
+            MYSQL_DISPLAY("Data Inserted.");
+        }
+    }
+    else
+    {
+        MYSQL_DISPLAY("Error server connected");
+    }
+    conn.close();
+}
+void add_data_device_info()
+{
+    String device_info_insert = String("INSERT INTO `") + database + "`.`" + table_device_info + "`( `Data_zdarzenia`, `Godzina_zdarzenia`, `Opis_zdarzenia`) VALUES ('" + get_date() + "','" + get_time() + "','Wlaczenie urzadzenia');";
+    connect_to_database_again();
+    MySQL_Query query_mem = MySQL_Query(&conn);
+    if (conn.connected())
+    {
+        MYSQL_DISPLAY(device_info_insert);
+        if (!query_mem.execute(device_info_insert.c_str()))
         {
             MYSQL_DISPLAY("Insert error");
         }

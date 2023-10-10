@@ -2,6 +2,7 @@
 DROP TABLE water_sensor;
 DROP TABLE rain_gaugae;
 DROP TABLE rain_sensor;
+DROP TABLE device_info;
 Drop TABLE logs;
 
 DROP DATABASE rain_measurement_system;
@@ -44,3 +45,18 @@ CREATE TABLE rain_measurement_system.logs (
 PRIMARY KEY (`ID`)
 ) 
 ENGINE = InnoDB;
+
+
+CREATE TABLE rain_measurement_system.device_info
+(`ID` INT NOT NULL AUTO_INCREMENT , 
+`Device_mac_address` VARCHAR(17) NOT NULL ,
+`Network_ssid` INT(50) NOT NULL ,
+`Network_ip` VARCHAR(30) NOT NULL , 
+`Database_name` VARCHAR(50) NOT NULL , 
+`Database_ip` VARCHAR(30) NOT NULL , 
+`Database_port` INT(10) NOT NULL , 
+`Database_user_name` VARCHAR(50) NOT NULL ,
+`Data_aktualizacji` DATE NOT NULL , 
+`Czas_aktualizacji` TIME NOT NULL ,
+PRIMARY KEY (`ID`)
+) ENGINE = InnoDB;
