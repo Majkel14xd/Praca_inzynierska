@@ -34,8 +34,8 @@
 
 /*Variables*/
 byte mac_addr[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
-char ssid[] = "NETIASPOT-2.4GHz-8Ps7";
-char pass[] = "tw6eUEH8";
+char ssid[] = "Redmi5A_Majkel";
+char pass[] = "2ktujmbnvzmxu4p";
 char userdatabse[] = "Majkel14xd";
 char passworddatabase[] = "zaq1@WSX";
 char database[] = "rain_measurement_system";
@@ -50,7 +50,7 @@ uint16_t server_port = 3306;
 
 /*Objects*/
 BlynkTimer timer;
-IPAddress serverIP(192, 168, 100, 12);
+IPAddress serverIP(192, 168, 121, 180);
 NewPing sonar(TRIG_PIN_ULTR_SONIC_SENSOR, ECHO_PIN_ULTR_SONIC_SENSOR);
 MySQL_Connection conn((Client *)&client);
 MySQL_Query *query_mem;
