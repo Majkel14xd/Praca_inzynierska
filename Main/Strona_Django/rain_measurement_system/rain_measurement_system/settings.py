@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-4mx9b(#jl*!q6yym@nt!j-oq%m^@flz0#=y$@npv%tc^hb^j^^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["192.168.100.12", "lohalhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["192.168.43.180", "lohalhost", "127.0.0.1"]
 
 
 # Application definition
@@ -81,7 +81,7 @@ DATABASES = {
         "NAME": "rain_measurement_system",
         "USER": "Majkel14xd",
         "PASSWORD": "zaq1@WSX",
-        "HOST": "192.168.100.12",
+        "HOST": "192.168.121.180",
         "PORT": "3306",
     }
 }
