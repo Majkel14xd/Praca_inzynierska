@@ -1,6 +1,13 @@
 {
-  "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter"
-  },
-  "python.formatting.provider": "none"
+  "files.associations": {
+    "*.embeddedhtml": "html",
+    "*.ino": "cpp",
+    "vector": "cpp",
+    "array": "cpp",
+    "string": "cpp",
+    "string_view": "cpp",
+    "*.tcc": "cpp",
+    "fstream": "cpp",
+    "new": "cpp"
+  }
 }
