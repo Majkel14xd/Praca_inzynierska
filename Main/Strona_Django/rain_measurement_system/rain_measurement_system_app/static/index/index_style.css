@@ -1,0 +1,87 @@
+#top-menu {
+  background-color: rgba(0, 0, 0, 0);
+  width: 100%;
+  height: 10vh;
+  display: block;
+}
+
+#top-menu a {
+  float: right;
+  display: block;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  color: blue;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 200;
+}
+
+#top-menu a:hover {
+  background-color: rgba(4, 186, 192, 0.1);
+}
+
+body {
+  background-image: url("rain.gif");
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  margin: 0;
+  padding: 0;
+  background-color: #111;
+  width: 100hv;
+  height: 100vh;
+  background-position: center;
+}
+
+#o_stronie {
+  width: 100%;
+  height: 200px;
+  float: left;
+  color: white;
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+#o_autorze {
+  width: 100%;
+  height: 200px;
+  float: left;
+  color: white;
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+#content {
+  width: 100%;
+  height: 200px;
+  text-align: center;
+  font-size: 50px;
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+#menu-toggle {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  #top-menu {
+    display: none;
+  }
+  #menu-toggle {
+    display: block;
+    float: center;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    color: blue;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-weight: 200;
+  }
+  #top-menu a {
+    float: center;
+    display: block;
+    padding: 14px 16px;
+    text-decoration: none;
+    color: blue;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-weight: 200;
+    width: 100%;
+  }
+}
