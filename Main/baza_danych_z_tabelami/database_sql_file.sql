@@ -1,4 +1,4 @@
--- Active: 1693519773037@@192.168.100.12@3306@rain_measurement_system
+-- Active: 1697808530746@@192.168.0.170@3306@rain_measurement_system
 DROP TABLE water_sensor;
 DROP TABLE rain_gaugae;
 DROP TABLE rain_sensor;
@@ -50,7 +50,7 @@ ENGINE = InnoDB;
 CREATE TABLE rain_measurement_system.device_info
 (`ID` INT NOT NULL AUTO_INCREMENT , 
 `Device_mac_address` VARCHAR(17) NOT NULL ,
-`Network_ssid` INT(50) NOT NULL ,
+`Network_ssid` VARCHAR(30) NOT NULL ,
 `Network_ip` VARCHAR(30) NOT NULL , 
 `Database_name` VARCHAR(50) NOT NULL , 
 `Database_ip` VARCHAR(30) NOT NULL , 

@@ -81,7 +81,7 @@ DATABASES = {
         "NAME": "rain_measurement_system",
         "USER": "Majkel14xd",
         "PASSWORD": "zaq1@WSX",
-        "HOST": "192.168.121.180",
+        "HOST": "192.168.0.170",
         "PORT": "3306",
     }
 }
