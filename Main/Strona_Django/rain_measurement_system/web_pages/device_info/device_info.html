@@ -16,7 +16,20 @@
       <a href="/signout">Wyloguj</a>
       <a href="/index">Do głównej strony</a>
     </div>
-    <div id="content"></div>
+    <div id="content">
+      <h1>Ostatnie informacje urządzenia</h1>
+      <p>Adres MAC urządzenia: {{ latest_device_info.Device_mac_address }}</p>
+      <p>SSID routera: {{ latest_device_info.Network_ssid }}</p>
+      <p>Adres IP routera: {{ latest_device_info.Network_ip }}</p>
+      <p>Nazwa bazy danych: {{ latest_device_info.Database_name }}</p>
+      <p>Ip bazy danych: {{ latest_device_info.Database_ip }}</p>
+      <p>Port bazy danych: {{ latest_device_info.Database_port }}</p>
+      <p>
+        Nazwa uzytkownika bazy danych: {{latest_device_info.Database_user_name}}
+      </p>
+      <p>Data aktualizacji: {{ latest_device_info.Data_aktualizacji }}</p>
+      <p>Czas aktualizacji: {{ latest_device_info.Czas_aktualizacji }}</p>
+    </div>
     <div id="left_menu">
       <a href="/control_panel/">Panel kontrolny</a>
       <a href="/control_panel/profile">Profil</a>

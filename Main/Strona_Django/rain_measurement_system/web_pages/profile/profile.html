@@ -10,6 +10,11 @@
       type="text/css"
       href=" {% static 'control_panel/control_panel_style.css' %} "
     />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href=" {% static 'profile/profile_style.css' %} "
+    />
   </head>
   <body>
     <div id="top_menu">
@@ -18,7 +23,13 @@
     </div>
     <div id="content">
       Profil
-      <a href="/control_panel/profile/change_password">Zmień hasło</a>
+      <br />
+      <br />
+      <a
+        href="/control_panel/profile/change_password"
+        id="button_password_change"
+        >Zmień hasło</a
+      >
     </div>
     <div id="left_menu">
       <a href="/control_panel/">Panel kontrolny</a>

@@ -16,9 +16,9 @@ class LogsForm(forms.Form):
 
 class Datafrommuysqlform(forms.Form):
     MODELS_CHOICES = [
-        ("rain_gauge", "Rain Gauge"),
-        ("rain_sensor", "Rain Sensor"),
-        ("water_sensor", "Water Sensor"),
+        ("rain_sensor", "Czujnik Deszczu"),
+        ("water_sensor", "Czujnik Wody"),
+        ("rain_gauge", "Zbiornik wody po opadach"),
     ]
 
     model = forms.ChoiceField(choices=MODELS_CHOICES)

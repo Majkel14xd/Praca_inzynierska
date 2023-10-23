@@ -1,3 +1,6 @@
+from .forms import (
+    LogsForm,
+)
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login as auth_login
@@ -89,12 +92,6 @@ def profile(request):
     return render(request, "profile/profile.html")
 
 
-from django.shortcuts import render, redirect
-from .forms import (
-    LogsForm,
-)
-
-
 def logs(request):
     if not request.user.is_authenticated:
         return redirect("login")
@@ -106,7 +103,8 @@ def logs(request):
         if form.is_valid():
             date_from = form.cleaned_data["date_from"]
             date_to = form.cleaned_data["date_to"]
-            logs = Logs.objects.filter(data_zdarzenia__range=(date_from, date_to))
+            logs = Logs.objects.filter(
+                data_zdarzenia__range=(date_from, date_to))
             if not logs:
                 msg_data_empty = "Brak danych albo nie uzupełniona dobrze data szukania"
     else:
@@ -123,7 +121,7 @@ def database_from_mysql(request):
     if not request.user.is_authenticated:
         return redirect("login")
 
-    data = None  
+    data = None
     message = ""
     if request.method == "POST":
         form = Datafrommuysqlform(request.POST)
@@ -152,7 +150,7 @@ def database_from_mysql(request):
     context = {
         "form": form,
         "data": data,
-        "message": message,  
+        "message": message,
     }
 
     return render(request, "database_from_mysql/database_from_mysql.html", context)
@@ -161,7 +159,8 @@ def database_from_mysql(request):
 def device_info(request):
     if not request.user.is_authenticated:
         return redirect("login")
-    return render(request, "device_info/device_info.html")
+    latest_device_info = DeviceInfo.objects.latest('id')
+    return render(request, "device_info/device_info.html", {'latest_device_info': latest_device_info})
 
 
 def settings(request):

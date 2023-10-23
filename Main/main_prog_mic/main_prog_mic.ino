@@ -18,7 +18,8 @@
 #define RAIN_GAUGE_VALUE V8
 #define WATER_NOTIFICATION V9
 #define MYSQL_DEBUG_PORT Serial
-#define _MYSQL_LOGLEVEL_ 1
+#define _MYSQL_LOGLEVEL_ 1 
+
 /*Includes*/
 #include <BlynkSimpleEsp32.h>
 #include <MySQL_Generic.h>
@@ -161,7 +162,7 @@ void rain_sensor()
   Serial.println(rain_sesnor_value);
   if (status_rain_sensor_pin_virtual == 1)
   {
-    if (rain_sesnor_value > 4095)
+    if (rain_sesnor_value == 4095)
     {
       Serial.println("Brak opadow");
       Blynk.virtualWrite(RAIN_SENSOR_TEXT_VALUE, "Brak opadow");
@@ -476,6 +477,10 @@ void check_tables_database()
       String("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE "
              "TABLE_SCHEMA = '") +
       database + "' AND TABLE_NAME = '" + table_logs + "';";
+  String check_device_info_table_exist =
+      String("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE "
+             "TABLE_SCHEMA = '") +
+      database + "' AND TABLE_NAME = '" + table_device_info + "';";
   String create_table_water_sensor =
       String("CREATE TABLE `") + database + "`.`" + table_water_sesnor +
       "`(`ID` INT NOT NULL AUTO_INCREMENT, `Data_odczytu` DATE NOT NULL, "
@@ -498,6 +503,9 @@ void check_tables_database()
       "`(`ID` INT NOT NULL AUTO_INCREMENT , `Data_zdarzenia` DATE NOT NULL , "
       "`Godzina_zdarzenia` TIME NOT NULL , `Opis_zdarzenia` VARCHAR(255) NOT "
       "NULL , PRIMARY KEY (`ID`)) ENGINE = InnoDB;";
+String create_table_device_info =
+  String("CREATE TABLE `") + database + "`.`" + table_device_info +
+  "`(`ID` INT NOT NULL AUTO_INCREMENT , `Device_mac_address` VARCHAR(17) NOT NULL , `Network_ssid` VARCHAR(30) NOT NULL , `Network_ip` VARCHAR(30) NOT NULL , `Database_name` VARCHAR(50) NOT NULL , `Database_ip` VARCHAR(30) NOT NULL , `Database_port` INT(10) NOT NULL , `Database_user_name` VARCHAR(50) NOT NULL , `Data_aktualizacji` DATE NOT NULL , `Czas_aktualizacji` TIME NOT NULL , PRIMARY KEY (`ID`) ) ENGINE = InnoDB;";
 
   MYSQL_DISPLAY("Checking database tables");
   MYSQL_DISPLAY("Checking water sensor table");
@@ -618,7 +626,7 @@ void check_tables_database()
   }
   column_names *cols4 = query_mem.get_columns();
 
-  if (cols3->num_fields > 0)
+  if (cols4->num_fields > 0)
   {
     row_values *row4 = query_mem.get_next_row();
     if (row4 != NULL)
@@ -635,6 +643,43 @@ void check_tables_database()
       MYSQL_DISPLAY("Creating table logs");
       MYSQL_DISPLAY(create_table_logs);
       if (!query_mem.execute(create_table_logs.c_str(), true))
+      {
+        MYSQL_DISPLAY("Querying error, table not added");
+        return;
+      }
+      MYSQL_DISPLAY("Table creating");
+      query_mem.close();
+    }
+  }
+  conn.close();
+
+connect_to_database_again();
+  MYSQL_DISPLAY("Checking table device info");
+  MYSQL_DISPLAY(check_device_info_table_exist);
+  if (!query_mem.execute(check_device_info_table_exist.c_str(), true))
+  {
+    MYSQL_DISPLAY("Querying error ");
+    return;
+  }
+  column_names *cols5 = query_mem.get_columns();
+
+  if (cols5->num_fields > 0)
+  {
+    row_values *row5 = query_mem.get_next_row();
+    if (row5 != NULL)
+    {
+      if (String(row5->values[0]) == String(table_device_info))
+      {
+        MYSQL_DISPLAY("Table exists");
+        query_mem.close();
+      }
+    }
+    else
+    {
+      MYSQL_DISPLAY("Table not exists");
+      MYSQL_DISPLAY("Creating table logs");
+      MYSQL_DISPLAY(create_table_device_info);
+      if (!query_mem.execute(create_table_device_info.c_str(), true))
       {
         MYSQL_DISPLAY("Querying error, table not added");
         return;
