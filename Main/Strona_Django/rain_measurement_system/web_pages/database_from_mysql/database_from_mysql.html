@@ -13,7 +13,7 @@
     <link
       rel="stylesheet"
       type="text/css"
-      href="{% static 'database_from_mysql/database_from_mysql.css' %}"
+      href="{% static 'database_from_mysql/database_from_mysql_style.css' %}"
     />
     <script src="{% static 'database_from_mysql/database_from_mysql.js' %}"></script>
   </head>
@@ -81,6 +81,13 @@
       <div id="pagination">
         <button id="prevPage">Poprzednia</button>
         <button id="nextPage">Następna</button>
+        <br />
+        <br />
+        <a
+          href="/control_panel/database_from_mysql/live_chart"
+          id="button_live_chart"
+          >Wykresy live z ostatniej godziny</a
+        >
       </div>
     </div>
     <div id="left_menu">

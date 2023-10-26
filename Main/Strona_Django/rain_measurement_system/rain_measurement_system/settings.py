@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-4mx9b(#jl*!q6yym@nt!j-oq%m^@flz0#=y$@npv%tc^hb^j^^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["192.168.0.170", "lohalhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -74,7 +74,6 @@ WSGI_APPLICATION = "rain_measurement_system.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
@@ -110,7 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "pl"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = 'Europe/Warsaw'
 
 USE_I18N = True
 

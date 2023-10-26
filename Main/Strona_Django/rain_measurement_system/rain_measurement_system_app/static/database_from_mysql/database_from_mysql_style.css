@@ -91,3 +91,18 @@ form {
 #napis_dane {
   text-align: center;
 }
+
+#button_live_chart {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  float: center;
+}
+
+a {
+  text-decoration: none;
+}

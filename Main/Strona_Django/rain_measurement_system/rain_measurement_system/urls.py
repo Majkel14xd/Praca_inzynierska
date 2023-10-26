@@ -52,4 +52,6 @@ urlpatterns = [
         name="rain_sensor_data",
     ),
     path("rain_gauge_data/", views.rain_gauge_data, name="rain_gauge_data"),
+    path("control_panel/database_from_mysql/live_chart",
+         views.live_chart, name="live_chart"),
 ]

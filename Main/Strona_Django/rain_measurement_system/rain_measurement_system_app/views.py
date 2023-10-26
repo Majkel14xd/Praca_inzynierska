@@ -56,10 +56,8 @@ def control_panel(request):
     if not request.user.is_authenticated:
         return redirect("login")
     welcome_message = request.session.pop("welcome_message", None)
-    get_water_sensor_data = water_sensor_data_api()
     context = {
         "welcome_message": welcome_message,
-        "get_water_sensor_data": get_water_sensor_data,
     }
     return render(request, "control_panel/control_panel.html", context)
 
@@ -89,7 +87,24 @@ def signout(request):
 def profile(request):
     if not request.user.is_authenticated:
         return redirect("login")
-    return render(request, "profile/profile.html")
+    user = request.user
+    username = user.username
+    email = user.email
+    first_name = user.first_name
+    last_name = user.last_name
+    date_joined = user.date_joined
+    last_login = user.last_login
+    id_num = user.id
+    context = {
+        'username': username,
+        'email': email,
+        'first_name': first_name,
+        'last_name': last_name,
+        'date_joined': date_joined,
+        'last_login': last_login,
+        'id_num': id_num,
+    }
+    return render(request, "profile/profile.html", context)
 
 
 def logs(request):
@@ -188,3 +203,9 @@ def rain_gauge_data(request):
         return redirect("login")
     get_rain_gauge_data = rain_gauge_data_api()
     return JsonResponse({"get_rain_gauge_data": get_rain_gauge_data})
+
+
+def live_chart(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
+    return render(request, "live_chart/live_chart.html")
