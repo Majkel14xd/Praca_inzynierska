@@ -7,7 +7,6 @@
 #define RAIN_SENSOR_ANALOG_PIN 34
 #define BLYNK_TEMPLATE_ID "TMPL4pChBbFWL"
 #define BLYNK_TEMPLATE_NAME "measurementrainsystem"
-#define BLYNK_AUTH_TOKEN "vnEDWHA3KRFwm91ji5MNPcojZgo1NfOT"
 #define BLYNK_PRINT Serial
 #define WATER_SENSOR_POWER_ON_OFF V0
 #define RAIN_SENSOR_POWER_ON_OFF V1
@@ -18,9 +17,10 @@
 #define RAIN_GAUGE_VALUE V8
 #define WATER_NOTIFICATION V9
 #define MYSQL_DEBUG_PORT Serial
-#define _MYSQL_LOGLEVEL_ 1 
+#define _MYSQL_LOGLEVEL_ 1
 
 /*Includes*/
+#include "passwords_keys.h"
 #include <BlynkSimpleEsp32.h>
 #include <MySQL_Generic.h>
 #include <NTPClient.h>
@@ -31,9 +31,7 @@
 /*Variables*/
 byte mac_addr[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
 char ssid[] = "TP-Link_9274";
-char pass[] = "55827812";
 char userdatabse[] = "Majkel14xd";
-char passworddatabase[] = "zaq1@WSX";
 char database[] = "rain_measurement_system";
 char table_water_sesnor[] = "water_sensor";
 char table_rain_gaugae[] = "rain_gaugae";
@@ -503,9 +501,9 @@ void check_tables_database()
       "`(`ID` INT NOT NULL AUTO_INCREMENT , `Data_zdarzenia` DATE NOT NULL , "
       "`Godzina_zdarzenia` TIME NOT NULL , `Opis_zdarzenia` VARCHAR(255) NOT "
       "NULL , PRIMARY KEY (`ID`)) ENGINE = InnoDB;";
-String create_table_device_info =
-  String("CREATE TABLE `") + database + "`.`" + table_device_info +
-  "`(`ID` INT NOT NULL AUTO_INCREMENT , `Device_mac_address` VARCHAR(17) NOT NULL , `Network_ssid` VARCHAR(30) NOT NULL , `Network_ip` VARCHAR(30) NOT NULL , `Database_name` VARCHAR(50) NOT NULL , `Database_ip` VARCHAR(30) NOT NULL , `Database_port` INT(10) NOT NULL , `Database_user_name` VARCHAR(50) NOT NULL , `Data_aktualizacji` DATE NOT NULL , `Czas_aktualizacji` TIME NOT NULL , PRIMARY KEY (`ID`) ) ENGINE = InnoDB;";
+  String create_table_device_info =
+      String("CREATE TABLE `") + database + "`.`" + table_device_info +
+      "`(`ID` INT NOT NULL AUTO_INCREMENT , `Device_mac_address` VARCHAR(17) NOT NULL , `Network_ssid` VARCHAR(30) NOT NULL , `Network_ip` VARCHAR(30) NOT NULL , `Database_name` VARCHAR(50) NOT NULL , `Database_ip` VARCHAR(30) NOT NULL , `Database_port` INT(10) NOT NULL , `Database_user_name` VARCHAR(50) NOT NULL , `Data_aktualizacji` DATE NOT NULL , `Czas_aktualizacji` TIME NOT NULL , PRIMARY KEY (`ID`) ) ENGINE = InnoDB;";
 
   MYSQL_DISPLAY("Checking database tables");
   MYSQL_DISPLAY("Checking water sensor table");
@@ -653,7 +651,7 @@ String create_table_device_info =
   }
   conn.close();
 
-connect_to_database_again();
+  connect_to_database_again();
   MYSQL_DISPLAY("Checking table device info");
   MYSQL_DISPLAY(check_device_info_table_exist);
   if (!query_mem.execute(check_device_info_table_exist.c_str(), true))

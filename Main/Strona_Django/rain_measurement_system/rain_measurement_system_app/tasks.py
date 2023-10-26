@@ -1,5 +1,5 @@
 import requests
-
+from decouple import config
 WATER_SENSOR_POWER_ON_OFF = "V0"
 RAIN_SENSOR_POWER_ON_OFF = "V1"
 WATER_SENSOR_VALUE = "V4"
@@ -8,7 +8,7 @@ RAIN_SENSOR_VALUE = "V6"
 RAIN_SENSOR_TEXT_VALUE = "V7"
 RAIN_GAUGE_VALUE = "V8"
 WATER_NOTIFICATION = "V9"
-BLYNK_AUTH_TOKEN = "vnEDWHA3KRFwm91ji5MNPcojZgo1NfOT"
+BLYNK_AUTH_TOKEN = config('BLYNK_AUTH_TOKEN')
 
 
 def water_sensor_data_api():
