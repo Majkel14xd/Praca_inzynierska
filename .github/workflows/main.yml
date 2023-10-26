@@ -25,5 +25,5 @@ jobs:
 
       - name: Run tests
         env:
-          DB_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
         run: python manage.py test
