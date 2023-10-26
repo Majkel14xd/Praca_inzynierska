@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -79,7 +81,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "rain_measurement_system",
         "USER": "Majkel14xd",
-        "PASSWORD": "zaq1@WSX",
+        "PASSWORD": config('DATABASE_PASSWORD'),
         "HOST": "192.168.0.170",
         "PORT": "3306",
     }
