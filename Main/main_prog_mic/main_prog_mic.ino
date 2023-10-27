@@ -3,7 +3,7 @@
 #define RAIN_SENSOR_PIN_DIGITAL 4
 #define ECHO_PIN_ULTR_SONIC_SENSOR 5
 #define TRIG_PIN_ULTR_SONIC_SENSOR 18
-#define WATER_SESNOR_ANALOG_PIN 35
+#define WATER_SENSOR_ANALOG_PIN 35
 #define RAIN_SENSOR_ANALOG_PIN 34
 #define BLYNK_TEMPLATE_ID "TMPL4pChBbFWL"
 #define BLYNK_TEMPLATE_NAME "measurementrainsystem"
@@ -291,7 +291,7 @@ void rain_gaugae()
 void water_sensor()
 {
   int water_sensor_value = 0;
-  water_sensor_value = analogRead(WATER_SESNOR_ANALOG_PIN);
+  water_sensor_value = analogRead(WATER_SENSOR_ANALOG_PIN);
   Blynk.virtualWrite(WATER_SENSOR_VALUE, water_sensor_value);
   Serial.print("Stan czujnika wody wynosi: ");
   Serial.println(water_sensor_value);
@@ -374,7 +374,7 @@ void pin_setup()
   pinMode(RAIN_SENSOR_PIN_DIGITAL, OUTPUT);
   pinMode(RAIN_SENSOR_ANALOG_PIN, INPUT);
   pinMode(WATER_SENSOR_PIN_DIGITAL, OUTPUT);
-  pinMode(WATER_SESNOR_ANALOG_PIN, INPUT);
+  pinMode(WATER_SENSOR_ANALOG_PIN, INPUT);
   pinMode(TRIG_PIN_ULTR_SONIC_SENSOR, OUTPUT);
   pinMode(ECHO_PIN_ULTR_SONIC_SENSOR, INPUT);
   digitalWrite(RAIN_SENSOR_PIN_DIGITAL, HIGH);
