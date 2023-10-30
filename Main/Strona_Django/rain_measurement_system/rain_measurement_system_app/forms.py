@@ -24,3 +24,18 @@ class Datafrommuysqlform(forms.Form):
     model = forms.ChoiceField(choices=MODELS_CHOICES)
     date_from = forms.DateField(widget=forms.DateInput(attrs={"type": "date"}))
     date_to = forms.DateField(widget=forms.DateInput(attrs={"type": "date"}))
+
+
+LAST_DAYS_CHOICES = [
+    (1, 'Ostatni dzień'),
+    (7, 'Ostatnie 7 dni'),
+    (30, 'Ostatnie 30 dni'),
+]
+
+
+class EmailScheduleForm(forms.Form):
+    last_days = forms.ChoiceField(
+        label='Ilość ostatnich dni',
+        choices=LAST_DAYS_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )

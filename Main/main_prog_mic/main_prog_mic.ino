@@ -18,6 +18,9 @@
 #define WATER_NOTIFICATION V9
 #define MYSQL_DEBUG_PORT Serial
 #define _MYSQL_LOGLEVEL_ 1
+#define SMTP_server "smtp.gmail.com"
+#define SMTP_Port 587
+#define sender_email "majkel114xdd@gmail.com"
 
 /*Includes*/
 #include "passwords_keys.h"
@@ -28,9 +31,12 @@
 #include <WiFi.h>
 #include <WiFiClient.h>
 #include <WiFiUdp.h>
+#include <ESP_Mail_Client.h>
+
 /*Variables*/
 byte mac_addr[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
 char ssid[] = "TP-Link_9274";
+char pass[] = "55827812";
 char userdatabse[] = "Majkel14xd";
 char database[] = "rain_measurement_system";
 char table_water_sensor[] = "water_sensor";
@@ -50,7 +56,9 @@ MySQL_Connection conn((Client *)&client);
 MySQL_Query *query_mem;
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP);
-
+ESP_Mail_Session session;
+SMTP_Message message;
+SMTPSession smtp;
 /*Blynk Functions*/
 BLYNK_CONNECTED() { Blynk.syncAll(); }
 
@@ -703,7 +711,7 @@ void connect_to_database_again()
 void set_time_and_date()
 {
   timeClient.begin();
-  timeClient.setTimeOffset(7200);
+  timeClient.setTimeOffset(3600);
 }
 String get_time()
 {
@@ -780,6 +788,78 @@ void add_data_device_info()
   }
   conn.close();
 }
+void smtp_server_setup()
+{
+  smtp.debug(1);
+  session.server.host_name = SMTP_server;
+  session.server.port = SMTP_Port;
+  session.login.email = sender_email;
+  session.login.password = sender_password;
+  session.login.user_domain = "";
+  message.sender.name = "System monitorowania opadow deszczu";
+  message.sender.email = sender_email;
+}
+void send_email_water_sensor_alert()
+{
+  row_values *row = NULL;
+  int water_sensor_value = 0;
+  water_sensor_value = analogRead(WATER_SENSOR_ANALOG_PIN);
+  Serial.print("Z aletru wynosi");
+  Serial.println(water_sensor_value);
+  if (water_sensor_value > 1500)
+  {
+    String query_users = String("SELECT ") + database + ".auth_user.first_name, " + database + ".auth_user.last_name, " + database + ".auth_user.email FROM " + database + ".auth_user WHERE " + database + ".auth_user.is_superuser=0;";
+    connect_to_database_again();
+    MySQL_Query query_mem = MySQL_Query(&conn);
+    if (conn.connected())
+    {
+      MYSQL_DISPLAY(query_users);
+
+      if (!query_mem.execute(query_users.c_str()))
+      {
+        MYSQL_DISPLAY("Querying error");
+        return;
+      }
+      column_names *cols = query_mem.get_columns();
+
+      if (cols->num_fields > 0)
+      {
+        do
+        {
+          row = query_mem.get_next_row();
+          if (row != NULL)
+          {
+            String firstName = row->values[0];
+            String lastName = row->values[1];
+            String email = row->values[2];
+            message.subject = "System pomiaru opadów wody";
+            message.addRecipient(firstName + " " + lastName, email);
+            String textMsg = "UWAGA!!!!!!! Pełny zbiornik wody!!!! Oproznij wode";
+            message.text.content = textMsg.c_str();
+            message.text.charSet = "us-ascii";
+            message.text.transfer_encoding = Content_Transfer_Encoding::enc_7bit;
+            if (!smtp.connect(&session))
+            {
+              return;
+            }
+            if (!MailClient.sendMail(&smtp, &message))
+            {
+              Serial.println("Error sending Email, " + smtp.errorReason());
+            }
+            Serial.println("Email sent");
+          }
+        } while (row != NULL);
+
+        query_mem.close();
+      }
+    }
+    else
+    {
+      MYSQL_DISPLAY("Error server connected");
+    }
+    conn.close();
+  }
+}
 /*Setup*/
 void setup()
 {
@@ -788,6 +868,8 @@ void setup()
   connect_wifi_to_database();
   delay(1000);
   connect_to_mysql_database();
+  delay(1000);
+  smtp_server_setup();
   delay(1000);
   check_database_or_create_database();
   delay(1000);
@@ -805,6 +887,7 @@ void setup()
   timer.setInterval(10000L, water_sensor);
   timer.setInterval(10000L, rain_sensor);
   timer.setInterval(30000L, rain_gaugae);
+  timer.setInterval(15000L, send_email_water_sensor_alert);
 }
 /*Loop*/
 void loop()
