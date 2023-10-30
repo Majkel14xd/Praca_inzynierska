@@ -703,7 +703,7 @@ void connect_to_database_again()
 void set_time_and_date()
 {
   timeClient.begin();
-  timeClient.setTimeOffset(7200);
+  timeClient.setTimeOffset(3600);
 }
 String get_time()
 {

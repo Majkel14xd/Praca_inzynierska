@@ -15,6 +15,10 @@ from .forms import *
 from django.http import HttpResponse
 from .tasks import *
 from django.http import JsonResponse
+from django.db import connection
+from django.core.mail import send_mail
+from django.db.models import *
+from datetime import *
 
 
 def index(request):
@@ -181,7 +185,90 @@ def device_info(request):
 def settings(request):
     if not request.user.is_authenticated:
         return redirect("login")
-    return render(request, "settings/settings.html")
+
+    message_sensor_delete = None
+    message_logs_delete = None
+    message_email = None
+    message_device_info_delete = None
+    user = request.user
+    email_user = user.email
+    form = EmailScheduleForm()
+    if request.method == 'POST':
+        if 'sensors' in request.POST:
+            RainGaugae.objects.all().delete()
+            RainSensor.objects.all().delete()
+            WaterSensor.objects.all().delete()
+            message_sensor_delete = 'Pomyślnie usunięto dane z czujnikow.'
+        if 'logs' in request.POST:
+            Logs.objects.all().delete()
+            message_logs_delete = 'Pomyślnie usunięto dane z logow.'
+        if 'device_info' in request.POST:
+            query_delete_device_info = "DELETE FROM rain_measurement_system.device_info WHERE ID NOT IN (SELECT MAX(ID) FROM rain_measurement_system.device_info); "
+            with connection.cursor() as cursor:
+                cursor.execute(query_delete_device_info)
+            message_device_info_delete = 'Pomyślnie usunięto stare dane o urządzenia'
+        if 'send_email' in request.POST:
+            form = EmailScheduleForm(request.POST)
+            if form.is_valid():
+                last_days = int(form.cleaned_data['last_days'])
+                water_sensor_query = f'''
+                        SELECT AVG(Wartosc) AS Srednia_Wartosc
+                            FROM rain_measurement_system.water_sensor
+                            WHERE Data_odczytu >= DATE_SUB(CURDATE(), INTERVAL {last_days} DAY) 
+                            '''
+                rain_sensor_query = f'''
+                        SELECT AVG(Wartosc) AS Srednia_Wartosc
+                            FROM rain_measurement_system.rain_sensor
+                            WHERE Data_odczytu >= DATE_SUB(CURDATE(), INTERVAL {last_days} DAY) 
+                            '''
+                rain_gaugae_query = f'''
+                        SELECT AVG(Wartosc) AS Srednia_Wartosc
+                            FROM rain_measurement_system.rain_gaugae
+                            WHERE Data_odczytu >= DATE_SUB(CURDATE(), INTERVAL {last_days} DAY) 
+                            '''
+                with connection.cursor() as cursor:
+                    cursor.execute(water_sensor_query)
+                    water_sensor_query_result = cursor.fetchone()
+
+                    cursor.execute(rain_sensor_query)
+                    rain_sensor_query_result = cursor.fetchone()
+
+                    cursor.execute(rain_gaugae_query)
+                    rain_gaugae_query_result = cursor.fetchone()
+
+                email_subject = f'Raport z ostatnich {last_days} dni '
+                email_body = f'''
+                Średnia wartość z czujnika wody z zostatnich {last_days} dni wynosi: {water_sensor_query_result[0]}
+                Średnia wartość z czujnika deszczu z ostatnich {last_days} dni wynosi: {rain_sensor_query_result[0]}
+                Średnia wartość z zbiornika wody z deszczu z ostatnich {last_days} dni wynosi: {rain_gaugae_query_result[0]}
+                '''
+                from_email = 'majkel114xdd@gmail.com'
+                recipient_list = [email_user]
+                send_mail(email_subject, email_body, from_email,
+                          recipient_list)
+                message_email = "Email wyslano"
+            else:
+                form = EmailScheduleForm(request.POST)
+        request.session['message_sensor_delete'] = message_sensor_delete
+        request.session['message_logs_delete'] = message_logs_delete
+        request.session['message_email'] = message_email
+        request.session['message_device_info_delete'] = message_device_info_delete
+        return redirect("settings")
+
+    message_sensor_delete = request.session.pop('message_sensor_delete', None)
+    message_logs_delete = request.session.pop('message_logs_delete', None)
+    message_email = request.session.pop('message_email', None)
+    message_device_info_delete = request.session.pop(
+        'message_device_info_delete', None)
+    context = {
+        'message_sensor_delete': message_sensor_delete,
+        'message_logs_delete': message_logs_delete,
+        'message_email': message_email,
+        'message_device_info_delete': message_device_info_delete,
+        'email_user': email_user,
+        'form': form
+    }
+    return render(request, 'settings/settings.html', context)
 
 
 def water_sensor_data(request):

@@ -3,7 +3,14 @@ DROP TABLE water_sensor;
 DROP TABLE rain_gaugae;
 DROP TABLE rain_sensor;
 DROP TABLE device_info;
-Drop TABLE logs;
+DROP TABLE logs;
+
+DELETE FROM water_sensor;
+DELETE FROM  rain_gaugae;
+DELETE FROM  rain_sensor;
+DELETE FROM  device_info;
+DELETE FROM  logs;
+
 
 DROP DATABASE rain_measurement_system;
 CREATE DATABASE rain_measurement_system;
