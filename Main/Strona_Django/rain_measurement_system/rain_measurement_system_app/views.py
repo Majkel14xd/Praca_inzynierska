@@ -178,8 +178,18 @@ def database_from_mysql(request):
 def device_info(request):
     if not request.user.is_authenticated:
         return redirect("login")
+    device_connected = "Brak informacji"
     latest_device_info = DeviceInfo.objects.latest('id')
-    return render(request, "device_info/device_info.html", {'latest_device_info': latest_device_info})
+    device_connected_status = device_is_connected()
+    if device_connected_status is False:
+        device_connected = "Rozłączono"
+    if device_connected_status is True:
+        device_connected = "Podłączono"
+    context = {
+        "latest_device_info": latest_device_info,
+        "device_connected": device_connected,
+    }
+    return render(request, "device_info/device_info.html",context)
 
 
 def settings(request):
@@ -295,4 +305,13 @@ def rain_gauge_data(request):
 def live_chart(request):
     if not request.user.is_authenticated:
         return redirect("login")
-    return render(request, "live_chart/live_chart.html")
+
+    if request.method == 'POST':
+        form = SensorSelectionFormGraph(request.POST)
+        if form.is_valid():
+            sensor_type = form.cleaned_data['sensor_type']
+            return render(request, 'live_chart/live_chart.html', {'form': form,'sensor_type': sensor_type})
+    else:
+        form = SensorSelectionFormGraph()
+
+    return render(request, 'live_chart/live_chart.html', {'form': form})

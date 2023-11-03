@@ -35,8 +35,8 @@
 
 /*Variables*/
 byte mac_addr[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
-char ssid[] = "TP-Link_9274";
-char pass[] = "55827812";
+char ssid[] = "NETIASPOT-2.4GHz-8Ps7";
+char pass[] = "tw6eUEH8";
 char userdatabse[] = "Majkel14xd";
 char database[] = "rain_measurement_system";
 char table_water_sensor[] = "water_sensor";
@@ -50,7 +50,7 @@ uint16_t server_port = 3306;
 
 /*Objects*/
 BlynkTimer timer;
-IPAddress serverIP(192, 168, 0, 170);
+IPAddress serverIP(192, 168, 100, 12);
 NewPing sonar(TRIG_PIN_ULTR_SONIC_SENSOR, ECHO_PIN_ULTR_SONIC_SENSOR);
 MySQL_Connection conn((Client *)&client);
 MySQL_Query *query_mem;
@@ -806,7 +806,7 @@ void send_email_water_sensor_alert()
   water_sensor_value = analogRead(WATER_SENSOR_ANALOG_PIN);
   Serial.print("Z aletru wynosi");
   Serial.println(water_sensor_value);
-  if (water_sensor_value > 1500)
+  if (water_sensor_value > 2100)
   {
     String query_users = String("SELECT ") + database + ".auth_user.first_name, " + database + ".auth_user.last_name, " + database + ".auth_user.email FROM " + database + ".auth_user WHERE " + database + ".auth_user.is_superuser=0;";
     connect_to_database_again();

@@ -39,3 +39,18 @@ class EmailScheduleForm(forms.Form):
         choices=LAST_DAYS_CHOICES,
         widget=forms.Select(attrs={'class': 'form-control'})
     )
+
+
+
+
+class SensorSelectionFormGraph(forms.Form):
+    SENSOR_CHOICES = (
+        ('water_sensor', 'Czujnik wody'),
+        ('rain_sensor', 'Czujnik deszczu'),
+        ('rain_gauge', 'Zbiornik wody po opadach'),
+    )
+
+    sensor_type = forms.ChoiceField(
+        label='Wybierz rodzaj czujnika:',
+        choices=SENSOR_CHOICES,
+    )

@@ -76,6 +76,8 @@ button {
   cursor: pointer;
   margin-top: 10px;
   float: center;
+  font-size: 15px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 #napis_logi {
@@ -90,4 +92,17 @@ form {
 
 #msg_data_empty {
   text-align: center;
+}
+
+input[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  float: center;
+  font-size: 15px;
+  font-family: Arial, Helvetica, sans-serif;
 }

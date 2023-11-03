@@ -76,6 +76,8 @@ button {
   cursor: pointer;
   margin-top: 10px;
   float: center;
+  font-size: 15px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 form {
   text-align: center;
@@ -101,6 +103,8 @@ form {
   cursor: pointer;
   margin-top: 10px;
   float: center;
+  font-size: 15px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 a {
