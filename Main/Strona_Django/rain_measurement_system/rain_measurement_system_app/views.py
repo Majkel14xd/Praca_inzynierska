@@ -304,13 +304,8 @@ def rain_gauge_data(request):
 def water_sensor_text_data(request):
     if not request.user.is_authenticated:
         return redirect("login")
-    get_water_sensor_text_data = water_sensor_text_data_api()
-    
-    # Convert the JSON response to a string
-    response_json = {"get_water_sensor_text_data": get_water_sensor_text_data}
-    json_string = json.dumps(response_json)
-    
-    return HttpResponse(json_string, content_type='application/json')
+    get_water_sensor_text_data=water_sensor_text_data_api()
+    return JsonResponse({"get_water_sensor_text_data": get_water_sensor_text_data})
 
 def rain_sensor_text_data(request):
     if not request.user.is_authenticated:

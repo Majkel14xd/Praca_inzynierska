@@ -43,7 +43,7 @@ def water_sensor_text_data_api():
         f"https://blynk.cloud/external/api/get?token={BLYNK_AUTH_TOKEN}&{WATER_SENSOR_TEXT_VALUE}"
     )
     if response.status_code == 200:
-        data = response.json()
+        data = response.text
         return data
 
 
@@ -52,7 +52,7 @@ def rain_sensor_text_data_api():
         f"https://blynk.cloud/external/api/get?token={BLYNK_AUTH_TOKEN}&{RAIN_SENSOR_TEXT_VALUE}"
     )
     if response.status_code == 200:
-        data = response.json()
+        data = response.text
         return data
 
 
@@ -61,7 +61,7 @@ def water_notification_data_api():
         f"https://blynk.cloud/external/api/get?token={BLYNK_AUTH_TOKEN}&{WATER_NOTIFICATION}"
     )
     if response.status_code == 200:
-        data = response.json()
+        data = response.text
         return data
 
 

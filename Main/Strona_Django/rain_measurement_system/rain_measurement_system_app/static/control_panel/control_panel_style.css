@@ -63,3 +63,21 @@ body {
   width: 85%;
   height: 100hv;
 }
+
+@media (max-width: 600px) {
+  #top_menu a {
+    font-size: 9px;
+  }
+  #left_menu a {
+    font-size: 9px;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+  #top_menu a {
+    font-size: 9px;
+  }
+  #left_menu a {
+    font-size: 9px;
+  }
+}

@@ -41,35 +41,6 @@ body {
   font-family: Georgia, "Times New Roman", Times, serif;
   color: grey;
 }
-#menu-toggle {
-  display: none;
-}
-
-@media screen and (max-width: 768px) {
-  #top-menu {
-    display: none;
-  }
-  #menu-toggle {
-    display: block;
-    float: center;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    color: blue;
-    font-family: Georgia, "Times New Roman", Times, serif;
-    font-weight: 200;
-  }
-  #top-menu a {
-    float: center;
-    display: block;
-    padding: 14px 16px;
-    text-decoration: none;
-    color: blue;
-    font-family: Georgia, "Times New Roman", Times, serif;
-    font-weight: 200;
-    width: 100%;
-  }
-}
 
 #footer {
   position: absolute;
@@ -77,4 +48,15 @@ body {
   width: 100%;
   text-align: center;
   color: grey;
+}
+
+@media (max-width: 600px) {
+  content {
+    font-size: 20px;
+  }
+}
+@media (min-width: 601px) and (max-width: 1024px) {
+  content {
+    font-size: 20px;
+  }
 }

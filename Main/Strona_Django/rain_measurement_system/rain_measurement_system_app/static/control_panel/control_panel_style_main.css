@@ -1,83 +1,22 @@
-body {
-  background-color: grey;
-  margin: 0;
-  padding: 0;
-}
-#top_menu {
-  background-color: green;
-  width: 85%;
-  height: 10vh;
-  display: block;
-  float: right;
-}
-
-#top_menu a {
-  float: right;
-  display: block;
-  text-align: center;
-  margin-left: 10px;
-  margin-right: 10px;
-  text-decoration: none;
-  color: blue;
-  font-family: Georgia, "Times New Roman", Times, serif;
-  font-weight: 200;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-#top_menu a:hover {
-  background-color: rgba(4, 186, 192, 0.1);
-}
-
-#left_menu {
-  background-color: aqua;
-  width: 15%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding-top: 30vh;
-}
-
-#left_menu a {
-  float: center;
-  display: block;
-  text-decoration: none;
-  color: blue;
-  font-family: Georgia, "Times New Roman", Times, serif;
-  font-weight: 200;
-  width: 100%;
-  border: 1px;
-  border-color: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
 #welcome_message {
   text-align: center;
   color: white;
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 
-#content {
-  float: right;
-  width: 85%;
-  height: 100hv;
-}
 .content_main_control_panel {
-  float: right;
-  display: flex;
   width: 85%;
-  flex-direction: column;
+  max-width: 85%;
+  box-sizing: border-box;
+  float: right;
 }
 
 .column {
-  flex: 1;
+  width: 100%;
+  max-width: 33.33%;
+  box-sizing: border-box;
+  float: right;
+  height: 90vh;
 }
 
 #water_sensor {
@@ -137,6 +76,7 @@ label:active:after {
   font-family: "Roboto", sans-serif;
   font-size: 32px;
   color: #004033;
+  float: center;
 }
 
 .gauge__body {
@@ -148,6 +88,7 @@ label:active:after {
   border-top-left-radius: 100% 200%;
   border-top-right-radius: 100% 200%;
   overflow: hidden;
+  float: center;
 }
 
 .gauge__fill {
@@ -160,6 +101,7 @@ label:active:after {
   transform-origin: center top;
   transform: rotate(0.25turn);
   transition: transform 0.2s ease-out;
+  float: center;
 }
 
 .gauge__cover {
@@ -177,4 +119,55 @@ label:active:after {
   justify-content: center;
   padding-bottom: 25%;
   box-sizing: border-box;
+  float: center;
+}
+
+#Informacja {
+  text-align: center;
+}
+
+#get_water_notification_text_data {
+  text-align: center;
+}
+
+#get_water_sensor_text_data {
+  text-align: center;
+}
+
+#get_rain_sensor_text_data {
+  text-align: center;
+}
+
+#gauge__body {
+  float: center;
+}
+
+@media (max-width: 600px) {
+  #water_sensor {
+    font-size: 10px;
+  }
+  #rain_sensor {
+    font-size: 10px;
+  }
+  #rain_gaugae {
+    font-size: 10px;
+  }
+  #welcome_message {
+    font-size: 10px;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 1024px) {
+  #water_sensor {
+    font-size: 10px;
+  }
+  #rain_sensor {
+    font-size: 10px;
+  }
+  #rain_gaugae {
+    font-size: 10px;
+  }
+  #welcome_message {
+    font-size: 10px;
+  }
 }

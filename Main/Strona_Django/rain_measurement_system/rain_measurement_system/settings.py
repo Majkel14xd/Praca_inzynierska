@@ -82,7 +82,7 @@ DATABASES = {
         "NAME": "rain_measurement_system",
         "USER": "Majkel14xd",
         "PASSWORD": config('DATABASE_PASSWORD'),
-        "HOST": "192.168.56.1",
+        "HOST": "192.168.0.170",
         "PORT": "3306",
     }
 }
