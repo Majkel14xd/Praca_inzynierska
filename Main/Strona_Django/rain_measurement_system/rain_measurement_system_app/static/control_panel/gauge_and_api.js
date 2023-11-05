@@ -94,6 +94,22 @@ function update_rain_gauge_data() {
   });
 }
 
+function update_water_sensor_text_data() {
+  $.ajax({
+    url: "/water_sensor_text_data/",
+    type: "GET",
+    dataType: "json",
+    success: function (data) {
+      $("#get_water_sensor_text_data").html(data.get_water_sensor_text_data);
+    },
+    complete: function () {
+      setTimeout(update_water_sensor_text_data, 5000);
+    },
+  });
+}
+
 update_water_sensor_data();
 update_rain_sensor_data();
 update_rain_gauge_data();
+
+update_water_sensor_text_data();

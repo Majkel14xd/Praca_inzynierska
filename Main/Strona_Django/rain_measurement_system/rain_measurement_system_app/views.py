@@ -19,7 +19,7 @@ from django.db import connection
 from django.core.mail import send_mail
 from django.db.models import *
 from datetime import *
-
+import json
 
 def index(request):
     if request.user.is_authenticated:
@@ -300,6 +300,29 @@ def rain_gauge_data(request):
         return redirect("login")
     get_rain_gauge_data = rain_gauge_data_api()
     return JsonResponse({"get_rain_gauge_data": get_rain_gauge_data})
+
+def water_sensor_text_data(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
+    get_water_sensor_text_data = water_sensor_text_data_api()
+    
+    # Convert the JSON response to a string
+    response_json = {"get_water_sensor_text_data": get_water_sensor_text_data}
+    json_string = json.dumps(response_json)
+    
+    return HttpResponse(json_string, content_type='application/json')
+
+def rain_sensor_text_data(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
+    get_rain_sensor_text_data=rain_sensor_text_data_api()
+    return JsonResponse({"get_rain_sensor_text_data": get_rain_sensor_text_data})
+
+def water_notification_text_data(request):
+    if not request.user.is_authenticated:
+        return redirect("login")
+    get_water_notification_text_data=water_notification_data_api()
+    return JsonResponse({"get_water_notification_text_data": get_water_notification_text_data})
 
 
 def live_chart(request):
