@@ -804,7 +804,6 @@ void send_email_water_sensor_alert()
   row_values *row = NULL;
   int water_sensor_value = 0;
   water_sensor_value = analogRead(WATER_SENSOR_ANALOG_PIN);
-  Serial.print("Z aletru wynosi");
   Serial.println(water_sensor_value);
   if (water_sensor_value > 2100)
   {
