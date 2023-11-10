@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +28,7 @@ SECRET_KEY = "django-insecure-4mx9b(#jl*!q6yym@nt!j-oq%m^@flz0#=y$@npv%tc^hb^j^^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["192.168.0.170", "lohalhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -74,14 +76,13 @@ WSGI_APPLICATION = "rain_measurement_system.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "rain_measurement_system",
         "USER": "Majkel14xd",
-        "PASSWORD": "zaq1@WSX",
-        "HOST": "192.168.121.180",
+        "PASSWORD": config('DATABASE_PASSWORD'),
+        "HOST": "10.100.4.42",
         "PORT": "3306",
     }
 }
@@ -110,7 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "pl"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = 'Europe/Warsaw'
 
 USE_I18N = True
 
@@ -133,3 +134,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 LOGIN_REDIRECT_URL = "control_panel"
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'majkel114xdd@gmail.com'
+EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD')

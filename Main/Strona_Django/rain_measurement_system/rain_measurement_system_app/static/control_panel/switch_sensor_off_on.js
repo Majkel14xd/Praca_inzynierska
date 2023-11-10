@@ -1,7 +1,6 @@
-let BLYNK_AUTH_TOKEN = "vnEDWHA3KRFwm91ji5MNPcojZgo1NfOT";
+import { BLYNK_AUTH_TOKEN } from "./password_keys.js";
 let RAIN_SENSOR_POWER_ON_OFF = "V1";
 let WATER_SENSOR_POWER_ON_OFF = "V0";
-
 function updateSwitchState(toggleSwitch, powerOnOff) {
   toggleSwitch.addEventListener("change", function () {
     const isChecked = toggleSwitch.checked;
@@ -12,12 +11,9 @@ function updateSwitchState(toggleSwitch, powerOnOff) {
     fetch(apiUrl)
       .then((response) => {
         if (!response.ok) {
-          // Obsłuż błąd w odpowiedni sposób
         }
       })
-      .catch((error) => {
-        // Obsłuż błąd w odpowiedni sposób
-      });
+      .catch((error) => {});
   });
 }
 

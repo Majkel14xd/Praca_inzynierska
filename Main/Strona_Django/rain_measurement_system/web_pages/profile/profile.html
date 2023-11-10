@@ -10,6 +10,11 @@
       type="text/css"
       href=" {% static 'control_panel/control_panel_style.css' %} "
     />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href=" {% static 'profile/profile_style.css' %} "
+    />
   </head>
   <body>
     <div id="top_menu">
@@ -17,8 +22,20 @@
       <a href="/index">Do głównej strony</a>
     </div>
     <div id="content">
-      Profil
-      <a href="/control_panel/profile/change_password">Zmień hasło</a>
+      <h1>Profil użytkownika {{username}}</h1>
+      <p>Imie: {{first_name}}</p>
+      <p>Nazwisko: {{last_name}}</p>
+      <p>Nazwa użytkownika: {{username}}</p>
+      <p>Id użytkownika: {{id_num}}</p>
+      <p>Email: {{email}}</p>
+      <p>Data rejestracji: {{date_joined}}</p>
+      <p>Ostatnie logowanie: {{last_login}}</p>
+      <br />
+      <a
+        href="/control_panel/profile/change_password"
+        id="button_password_change"
+        >Zmień hasło</a
+      >
     </div>
     <div id="left_menu">
       <a href="/control_panel/">Panel kontrolny</a>

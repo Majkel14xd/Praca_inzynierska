@@ -20,8 +20,15 @@
     {% load static %}
     <script
       src=" {% static 'control_panel/switch_sensor_off_on.js' %}  "
-      type="text/javascript"
+      type="module"
       async
+    ></script>
+     <script
+      src=" {% static 'control_panel/control_panel.js' %}  "
+    ></script>
+    <script
+      src=" {% static 'control_panel/password_keys.js' %}  "
+      type="module"
     ></script>
   </head>
   <body>
@@ -39,11 +46,14 @@
         </div>
         {% load static %}
         <script
-          src=" {% static 'control_panel/gauge.js' %}  "
+          src=" {% static 'control_panel/gauge_and_api.js' %}  "
           type="text/javascript"
         ></script>
-        <input type="checkbox" id="switch_water_sensor_off_on" />
+        <input type="checkbox" id="switch_water_sensor_off_on" />   
         <label for="switch_water_sensor_off_on"></label>
+         <p id="off_on">Włącz/Wyłącz czujnik</p>   
+            <p id="Informacja">Informacja: </p>
+         <p id="get_water_sensor_text_data"></p>
       </div>
       <div class="column" id="rain_sensor">
         <div class="gauge" id="gauge_rain_sensor">
@@ -53,7 +63,11 @@
           </div>
         </div>
         <input type="checkbox" id="switch_rain_sensor_off_on" />
-        <label for="switch_rain_sensor_off_on"></label>
+         <label for="switch_rain_sensor_off_on"></label>
+           <p id="off_on">Włącz/Wyłącz czujnik</p>   
+            <p id="Informacja">Informacja: </p>
+         <p id="get_rain_sensor_text_data"></p>
+
       </div>
       <div class="column" id="rain_gaugae">
         <div class="gauge" id="gauge_rain_gauge">
@@ -62,7 +76,8 @@
             <div class="gauge__cover" id="gauge__cover_rain_gauge"></div>
           </div>
         </div>
-      </div>
+        <p id="Informacja">Informacja: </p>
+        <p id="get_water_notification_text_data"></p>
     </div>
     <div id="left_menu">
       <a href="/control_panel/">Panel kontrolny</a>
