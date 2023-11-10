@@ -49,14 +49,3 @@ body {
   text-align: center;
   color: grey;
 }
-
-@media (max-width: 600px) {
-  content {
-    font-size: 20px;
-  }
-}
-@media (min-width: 601px) and (max-width: 1024px) {
-  content {
-    font-size: 20px;
-  }
-}

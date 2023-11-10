@@ -141,33 +141,3 @@ label:active:after {
 #gauge__body {
   float: center;
 }
-
-@media (max-width: 600px) {
-  #water_sensor {
-    font-size: 10px;
-  }
-  #rain_sensor {
-    font-size: 10px;
-  }
-  #rain_gaugae {
-    font-size: 10px;
-  }
-  #welcome_message {
-    font-size: 10px;
-  }
-}
-
-@media (min-width: 601px) and (max-width: 1024px) {
-  #water_sensor {
-    font-size: 10px;
-  }
-  #rain_sensor {
-    font-size: 10px;
-  }
-  #rain_gaugae {
-    font-size: 10px;
-  }
-  #welcome_message {
-    font-size: 10px;
-  }
-}
