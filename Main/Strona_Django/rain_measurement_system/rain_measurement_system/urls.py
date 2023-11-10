@@ -31,7 +31,6 @@ urlpatterns = [
         name="change_password",
     ),
     path("signout/", views.signout, name="signout"),
-    path("index/", views.indexafterlogin, name="indexafterlogin"),
     path("control_panel/profile/", views.profile, name="profile"),
     path("control_panel/logs/", views.logs, name="logs"),
     path(

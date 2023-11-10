@@ -19,18 +19,12 @@ from django.db import connection
 from django.core.mail import send_mail
 from django.db.models import *
 from datetime import *
-import json
 
 def index(request):
     if request.user.is_authenticated:
         return redirect("control_panel")
     else:
         return render(request, "index/index.html")
-
-
-def indexafterlogin(request):
-    return render(request, "index/index.html")
-
 
 def login(request):
     if request.user.is_authenticated:
