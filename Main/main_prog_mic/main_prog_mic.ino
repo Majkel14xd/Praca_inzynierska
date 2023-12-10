@@ -749,16 +749,16 @@ void add_log_power_on_device()
     MYSQL_DISPLAY(table_logs_insert);
     if (!query_mem.execute(table_logs_insert.c_str()))
     {
-      MYSQL_DISPLAY("Insert error");
+      MYSQL_DISPLAY("Insert  table_logs_inserterror");
     }
     else
     {
-      MYSQL_DISPLAY("Data Inserted.");
+      MYSQL_DISPLAY("Data table_logs_insert Inserted.");
     }
   }
   else
   {
-    MYSQL_DISPLAY("Error server connected");
+    MYSQL_DISPLAY("Error server database connected");
   }
   conn.close();
 }
@@ -775,16 +775,16 @@ void add_data_device_info()
     MYSQL_DISPLAY(device_info_insert);
     if (!query_mem.execute(device_info_insert.c_str()))
     {
-      MYSQL_DISPLAY("Insert error");
+      MYSQL_DISPLAY("Insert device_info_insert error");
     }
     else
     {
-      MYSQL_DISPLAY("Data Inserted.");
+      MYSQL_DISPLAY("Data device_info_insert Inserted.");
     }
   }
   else
   {
-    MYSQL_DISPLAY("Error server connected");
+    MYSQL_DISPLAY("Error server database connected");
   }
   conn.close();
 }
@@ -816,7 +816,7 @@ void send_email_water_sensor_alert()
 
       if (!query_mem.execute(query_users.c_str()))
       {
-        MYSQL_DISPLAY("Querying error");
+        MYSQL_DISPLAY("Querying query_users error");
         return;
       }
       column_names *cols = query_mem.get_columns();
@@ -854,7 +854,7 @@ void send_email_water_sensor_alert()
     }
     else
     {
-      MYSQL_DISPLAY("Error server connected");
+      MYSQL_DISPLAY("Error server database connected");
     }
     conn.close();
   }
