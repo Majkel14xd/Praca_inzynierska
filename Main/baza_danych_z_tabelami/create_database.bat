@@ -34,5 +34,5 @@ REM Create device_info table
 %MYSQL_EXECUTABLE% -h %MYSQL_HOST% -P %MYSQL_PORT% -u %MYSQL_USER% -p%MYSQL_PASSWORD% -D %DATABASE_NAME% -e "CREATE TABLE rain_measurement_system.device_info (`ID` INT NOT NULL AUTO_INCREMENT , `Device_mac_address` VARCHAR(17) NOT NULL , `Network_ssid` VARCHAR(30) NOT NULL , `Network_ip` VARCHAR(30) NOT NULL , `Database_name` VARCHAR(50) NOT NULL , `Database_ip` VARCHAR(30) NOT NULL , `Database_port` INT(10) NOT NULL , `Database_user_name` VARCHAR(50) NOT NULL , `Data_aktualizacji` DATE NOT NULL , `Czas_aktualizacji` TIME NOT NULL , PRIMARY KEY (`ID`) ) ENGINE = InnoDB;"
 
 REM Confirm completion
-echo Database and tables created successfully.
+echo Bazadanych stworzona.
 pause

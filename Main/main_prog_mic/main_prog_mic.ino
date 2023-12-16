@@ -35,8 +35,8 @@
 
 /*Variables*/
 byte mac_addr[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
-char ssid[] = "NETIASPOT-2.4GHz-8Ps7";
-char pass[] = "tw6eUEH8";
+char ssid[] = "TP-Link_9274";
+char pass[] = "55827812";
 char userdatabse[] = "Majkel14xd";
 char database[] = "rain_measurement_system";
 char table_water_sensor[] = "water_sensor";
@@ -50,7 +50,7 @@ uint16_t server_port = 3306;
 
 /*Objects*/
 BlynkTimer timer;
-IPAddress serverIP(192, 168, 100, 12);
+IPAddress serverIP(192, 168, 0, 170);
 NewPing sonar(TRIG_PIN_ULTR_SONIC_SENSOR, ECHO_PIN_ULTR_SONIC_SENSOR);
 MySQL_Connection conn((Client *)&client);
 MySQL_Query *query_mem;
@@ -96,16 +96,16 @@ BLYNK_WRITE(WATER_SENSOR_POWER_ON_OFF)
     MYSQL_DISPLAY(table_logs_insert);
     if (!query_mem.execute(table_logs_insert.c_str()))
     {
-      MYSQL_DISPLAY("Insert error");
+      MYSQL_DISPLAY("Insert table_logs_insert error");
     }
     else
     {
-      MYSQL_DISPLAY("Data Inserted.");
+      MYSQL_DISPLAY("Data table_logs_insert Inserted.");
     }
   }
   else
   {
-    MYSQL_DISPLAY("Error server connected");
+    MYSQL_DISPLAY("Error server database connected");
   }
   conn.close();
 }
@@ -144,16 +144,16 @@ BLYNK_WRITE(RAIN_SENSOR_POWER_ON_OFF)
     MYSQL_DISPLAY(table_logs_insert);
     if (!query_mem.execute(table_logs_insert.c_str()))
     {
-      MYSQL_DISPLAY("Insert error");
+      MYSQL_DISPLAY("Insert table_logs_insert error");
     }
     else
     {
-      MYSQL_DISPLAY("Data Inserted.");
+      MYSQL_DISPLAY("Data table_logs_insert Inserted.");
     }
   }
   else
   {
-    MYSQL_DISPLAY("Error server connected");
+    MYSQL_DISPLAY("Error server database connected");
   }
   conn.close();
 }
@@ -209,16 +209,16 @@ void rain_sensor()
       MYSQL_DISPLAY(rain_sensor_insert);
       if (!query_mem.execute(rain_sensor_insert.c_str()))
       {
-        MYSQL_DISPLAY("Insert error");
+        MYSQL_DISPLAY("Insert rain_sensor_insert error");
       }
       else
       {
-        MYSQL_DISPLAY("Data Inserted.");
+        MYSQL_DISPLAY("Data rain_sensor_insert Inserted.");
       }
     }
     else
     {
-      MYSQL_DISPLAY("Error server connected");
+      MYSQL_DISPLAY("Error server database connected");
     }
     conn.close();
   }
@@ -231,10 +231,10 @@ void rain_sensor()
 
 void rain_gaugae()
 {
-  const float onehumltocm = 1.18;
+  const float onehumltocm = 1.15;
   const float ml_to_cm = 100.0 / onehumltocm;
-  const float max_height_gaugae = 11.8;
-  const float funnel_area = 3.14159 * pow((12.5 / 2) / 100, 2);
+  const float max_height_gaugae = 9.2;
+  const float funnel_area = (6.25 * 6.25) * 3.14;
   digitalWrite(TRIG_PIN_ULTR_SONIC_SENSOR, LOW);
   delayMicroseconds(2);
   digitalWrite(TRIG_PIN_ULTR_SONIC_SENSOR, HIGH);
@@ -258,17 +258,15 @@ void rain_gaugae()
     volume = (max_height_gaugae - distance) * ml_to_cm;
   }
 
-  float volumeL = volume / 1000;
-
-  float rainlevel = volumeL / funnel_area;
+  float rainlevel = volume / funnel_area;
 
   Serial.print("Odległość: ");
   Serial.print(distance);
   Serial.print(" cm, Objętość wody: ");
-  Serial.print(volumeL);
-  Serial.print(" l, Ilość opadów: ");
+  Serial.print(volume);
+  Serial.print(" ml, Ilość opadów: ");
   Serial.print(rainlevel);
-  Serial.println(" l/m²");
+  Serial.println(" ml/cm²");
   Blynk.virtualWrite(RAIN_GAUGE_VALUE, rainlevel);
   String rain_gaugae_insert =
       String("INSERT INTO `") + database + "`.`" + table_rain_gaugae +
@@ -282,16 +280,16 @@ void rain_gaugae()
     MYSQL_DISPLAY(rain_gaugae_insert);
     if (!query_mem.execute(rain_gaugae_insert.c_str()))
     {
-      MYSQL_DISPLAY("Insert error");
+      MYSQL_DISPLAY("Insert rain_gaugae_insert error");
     }
     else
     {
-      MYSQL_DISPLAY("Data Inserted.");
+      MYSQL_DISPLAY("Data rain_gaugae_insert Inserted.");
     }
   }
   else
   {
-    MYSQL_DISPLAY("Error server connected");
+    MYSQL_DISPLAY("Error server database connected");
   }
   conn.close();
 }
@@ -355,16 +353,16 @@ void water_sensor()
       MYSQL_DISPLAY(water_sensor_insert);
       if (!query_mem.execute(water_sensor_insert.c_str()))
       {
-        MYSQL_DISPLAY("Insert error");
+        MYSQL_DISPLAY("Insert water_sensor_insert error");
       }
       else
       {
-        MYSQL_DISPLAY("Data Inserted.");
+        MYSQL_DISPLAY("Data water_sensor_insert Inserted.");
       }
     }
     else
     {
-      MYSQL_DISPLAY("Error server connected");
+      MYSQL_DISPLAY("Error server database connected");
     }
     conn.close();
   }
@@ -432,7 +430,7 @@ void check_database_or_create_database()
   MySQL_Query query_mem = MySQL_Query(&conn);
   if (!query_mem.execute(check_database_query.c_str(), true))
   {
-    MYSQL_DISPLAY("Querying error");
+    MYSQL_DISPLAY("Querying check_database_query error");
     return;
   }
   column_names *cols = query_mem.get_columns();
@@ -455,7 +453,7 @@ void check_database_or_create_database()
       MYSQL_DISPLAY("Creating database");
       if (!query_mem.execute(create_database.c_str(), true))
       {
-        MYSQL_DISPLAY("Querying error, database not added");
+        MYSQL_DISPLAY("Querying error create_database, database not added");
         return;
       }
       MYSQL_DISPLAY("Database creating");
@@ -519,7 +517,7 @@ void check_tables_database()
   MySQL_Query query_mem = MySQL_Query(&conn);
   if (!query_mem.execute(check_water_sensor_table_exist.c_str(), true))
   {
-    MYSQL_DISPLAY("Querying error");
+    MYSQL_DISPLAY("Querying check_water_sensor_table_exist error");
     return;
   }
   column_names *cols = query_mem.get_columns();
@@ -531,7 +529,7 @@ void check_tables_database()
     {
       if (String(row->values[0]) == String(table_water_sensor))
       {
-        MYSQL_DISPLAY("Table exists");
+        MYSQL_DISPLAY("Table table_water_sensor exists");
         query_mem.close();
       }
     }
@@ -542,10 +540,10 @@ void check_tables_database()
       MYSQL_DISPLAY(create_table_water_sensor);
       if (!query_mem.execute(create_table_water_sensor.c_str(), true))
       {
-        MYSQL_DISPLAY("Querying error, table not added");
+        MYSQL_DISPLAY("Querying error create_table_water_sensor, table not added");
         return;
       }
-      MYSQL_DISPLAY("Table creating");
+      MYSQL_DISPLAY("Table create_table_water_sensor creating");
       query_mem.close();
     }
   }
@@ -555,7 +553,7 @@ void check_tables_database()
   MYSQL_DISPLAY(check_rain_sensor_table_exist);
   if (!query_mem.execute(check_rain_sensor_table_exist.c_str(), true))
   {
-    MYSQL_DISPLAY("Querying error");
+    MYSQL_DISPLAY("Querying check_rain_sensor_table_exist error");
     return;
   }
   column_names *cols2 = query_mem.get_columns();
@@ -567,7 +565,7 @@ void check_tables_database()
     {
       if (String(row2->values[0]) == String(table_rain_sensor))
       {
-        MYSQL_DISPLAY("Table exists");
+        MYSQL_DISPLAY("Table table_rain_sensor  exists");
         query_mem.close();
       }
     }
@@ -578,10 +576,10 @@ void check_tables_database()
       MYSQL_DISPLAY(create_table_rain_sensor);
       if (!query_mem.execute(create_table_rain_sensor.c_str(), true))
       {
-        MYSQL_DISPLAY("Querying error, table not added");
+        MYSQL_DISPLAY("Querying create_table_rain_sensor error, table not added");
         return;
       }
-      MYSQL_DISPLAY("Table creating");
+      MYSQL_DISPLAY("Table create_table_rain_sensor creating");
       query_mem.close();
     }
   }
@@ -591,7 +589,7 @@ void check_tables_database()
   MYSQL_DISPLAY(check_rain_gaugae_table_exist);
   if (!query_mem.execute(check_rain_gaugae_table_exist.c_str(), true))
   {
-    MYSQL_DISPLAY("Querying error ");
+    MYSQL_DISPLAY("Querying check_rain_gaugae_table_exist error ");
     return;
   }
   column_names *cols3 = query_mem.get_columns();
@@ -603,7 +601,7 @@ void check_tables_database()
     {
       if (String(row3->values[0]) == String(table_rain_gaugae))
       {
-        MYSQL_DISPLAY("Table exists");
+        MYSQL_DISPLAY("Table  table_rain_gaugae exists");
         query_mem.close();
       }
     }
@@ -614,7 +612,7 @@ void check_tables_database()
       MYSQL_DISPLAY(create_table_rain_gaugae);
       if (!query_mem.execute(create_table_rain_gaugae.c_str(), true))
       {
-        MYSQL_DISPLAY("Querying error, table not added");
+        MYSQL_DISPLAY("Querying error create_table_rain_gaugae, table not added");
         return;
       }
       MYSQL_DISPLAY("Table creating");
@@ -627,7 +625,7 @@ void check_tables_database()
   MYSQL_DISPLAY(check_logs_table_exist);
   if (!query_mem.execute(check_logs_table_exist.c_str(), true))
   {
-    MYSQL_DISPLAY("Querying error ");
+    MYSQL_DISPLAY("Querying check_logs_table_exist error ");
     return;
   }
   column_names *cols4 = query_mem.get_columns();
@@ -650,10 +648,10 @@ void check_tables_database()
       MYSQL_DISPLAY(create_table_logs);
       if (!query_mem.execute(create_table_logs.c_str(), true))
       {
-        MYSQL_DISPLAY("Querying error, table not added");
+        MYSQL_DISPLAY("Querying create_table_logs error, table not added");
         return;
       }
-      MYSQL_DISPLAY("Table creating");
+      MYSQL_DISPLAY("Table  create_table_logscreating");
       query_mem.close();
     }
   }
@@ -664,7 +662,7 @@ void check_tables_database()
   MYSQL_DISPLAY(check_device_info_table_exist);
   if (!query_mem.execute(check_device_info_table_exist.c_str(), true))
   {
-    MYSQL_DISPLAY("Querying error ");
+    MYSQL_DISPLAY("Querying  check_device_info_table_exist error ");
     return;
   }
   column_names *cols5 = query_mem.get_columns();
@@ -687,10 +685,10 @@ void check_tables_database()
       MYSQL_DISPLAY(create_table_device_info);
       if (!query_mem.execute(create_table_device_info.c_str(), true))
       {
-        MYSQL_DISPLAY("Querying error, table not added");
+        MYSQL_DISPLAY("Querying  create_table_device_info error, table not added");
         return;
       }
-      MYSQL_DISPLAY("Table creating");
+      MYSQL_DISPLAY("Table create_table_device_info creating");
       query_mem.close();
     }
   }
@@ -749,7 +747,7 @@ void add_log_power_on_device()
     MYSQL_DISPLAY(table_logs_insert);
     if (!query_mem.execute(table_logs_insert.c_str()))
     {
-      MYSQL_DISPLAY("Insert  table_logs_inserterror");
+      MYSQL_DISPLAY("Insert  table_logs_insert error");
     }
     else
     {
@@ -804,7 +802,6 @@ void send_email_water_sensor_alert()
   row_values *row = NULL;
   int water_sensor_value = 0;
   water_sensor_value = analogRead(WATER_SENSOR_ANALOG_PIN);
-  Serial.println(water_sensor_value);
   if (water_sensor_value > 2100)
   {
     String query_users = String("SELECT ") + database + ".auth_user.first_name, " + database + ".auth_user.last_name, " + database + ".auth_user.email FROM " + database + ".auth_user WHERE " + database + ".auth_user.is_superuser=0;";
@@ -886,7 +883,7 @@ void setup()
   timer.setInterval(10000L, water_sensor);
   timer.setInterval(10000L, rain_sensor);
   timer.setInterval(30000L, rain_gaugae);
-  timer.setInterval(15000L, send_email_water_sensor_alert);
+  timer.setInterval(600000L, send_email_water_sensor_alert);
 }
 /*Loop*/
 void loop()
