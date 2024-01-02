@@ -141,3 +141,15 @@ label:active:after {
 #gauge__body {
   float: center;
 }
+
+
+#get_rain_gauge_data{
+  width: 100%;
+  max-width: 250px;
+  font-family: "Roboto", sans-serif;
+  font-size: 32px;
+  color: black;
+ text-align: right;
+}
+
+

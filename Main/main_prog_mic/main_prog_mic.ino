@@ -304,7 +304,7 @@ void water_sensor()
   String water_sensor_insert;
   if (status_water_sensor_pin_virtual == 1)
   {
-    if (water_sensor_value <= 0)
+    if (water_sensor_value <= 1000)
     {
       Blynk.virtualWrite(WATER_SENSOR_TEXT_VALUE, "Poziom niski zbiornika");
       Serial.println("Poziom niski zbiornika");
@@ -318,7 +318,7 @@ void water_sensor()
           get_date() + "','" + get_time() + "','" + water_sensor_value +
           "','Poziom niski zbiornika','Zbiornik jeszcze nie do oproznienia');";
     }
-    else if (water_sensor_value >= 1 && water_sensor_value <= 2100)
+    else if (water_sensor_value >= 1001 && water_sensor_value <= 2100)
     {
       Blynk.virtualWrite(WATER_SENSOR_TEXT_VALUE, "Poziom wysoki zbiornika");
       Serial.println("Poziom wysoki zbiornika");
