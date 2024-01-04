@@ -22,7 +22,7 @@ window.onload = function water_sensor_chart() {
   });
 
   var water_sensor_chart_update = function () {
-    var updateInterval = 5000;
+    var updateInterval = 10000;
     var dataLength = 12;
     $.ajax({
       url: "/water_sensor_data/",

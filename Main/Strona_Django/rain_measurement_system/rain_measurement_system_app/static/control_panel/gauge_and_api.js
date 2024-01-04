@@ -27,7 +27,7 @@ function update_water_sensor_data() {
       );
     },
     complete: function () {
-      setTimeout(update_water_sensor_data, 5000);
+      setTimeout(update_water_sensor_data, 10000);
     },
   });
 }
@@ -58,7 +58,7 @@ function update_rain_sensor_data() {
       );
     },
     complete: function () {
-      setTimeout(update_rain_sensor_data, 5000);
+      setTimeout(update_rain_sensor_data, 10000);
     },
   });
 }
@@ -87,7 +87,7 @@ function update_water_sensor_text_data() {
       $("#get_water_sensor_text_data").html(data.get_water_sensor_text_data);
     },
     complete: function () {
-      setTimeout(update_water_sensor_text_data, 5000);
+      setTimeout(update_water_sensor_text_data, 10000);
     },
   });
 }
@@ -101,7 +101,7 @@ function update_rain_sensor_text_data() {
       $("#get_rain_sensor_text_data").html(data.get_rain_sensor_text_data);
     },
     complete: function () {
-      setTimeout(update_rain_sensor_text_data, 5000);
+      setTimeout(update_rain_sensor_text_data, 10000);
     },
   });
 }
