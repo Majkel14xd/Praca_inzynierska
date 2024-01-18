@@ -802,7 +802,7 @@ void send_email_water_sensor_alert()
   row_values *row = NULL;
   int water_sensor_value = 0;
   water_sensor_value = analogRead(WATER_SENSOR_ANALOG_PIN);
-  if (water_sensor_value > 2100)
+  if (water_sensor_value >= 2100)
   {
     String query_users = String("SELECT ") + database + ".auth_user.first_name, " + database + ".auth_user.last_name, " + database + ".auth_user.email FROM " + database + ".auth_user WHERE " + database + ".auth_user.is_superuser=0;";
     connect_to_database_again();

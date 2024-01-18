@@ -52,7 +52,7 @@
           onclick="return confirm('Czy na pewno chcesz usunąć stare dane o urządzeniu?');"
         />
       </form>
-      <h1>Wyslij krótki raport srednich wartosci czujników z wybranych dni</h1>
+      <h1>Wyslij krótki raport średnich wartosci czujników z wybranych dni</h1>
       <form method="POST" id="send_email" onsubmit="clearForm()">
         {% csrf_token %} {{ form.as_p }}
         <input

@@ -22,7 +22,7 @@ window.onload = function rain_sensor_chart() {
   });
 
   var rain_sensor_chart_update = function () {
-    var updateInterval = 5000;
+    var updateInterval = 10000;
     var dataLength = 12;
     $.ajax({
       url: "/rain_sensor_data/",
