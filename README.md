@@ -10,7 +10,12 @@ This project aims to develop a system for measuring water levels after rainfall,
 - Water level sensor
 - YL-83 rainfall sensor
 - Ultrasonic distance sensor HC-SR04
+
+## Technologies
+
 - Blynk platform
 - MySQL database
+- Pyton with Django Framework
+- Arduino Uno IDE with C++
 
 
