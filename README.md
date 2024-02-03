@@ -15,7 +15,7 @@ This project aims to develop a system for measuring water levels after rainfall,
 
 - Blynk platform
 - MySQL database
-- Pyton with Django Framework(HTML, CSS, JS,JQuery)
+- Python with Django Framework(HTML, CSS, JS,JQuery)
 - Arduino IDE with C++
 
 
