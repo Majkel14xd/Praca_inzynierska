@@ -33,7 +33,7 @@ def water_sensor():
 
 
 while True:
-    print(f"Water_sensor value: {water_sensor()}")
+    print(f"Water sensor value: {water_sensor()}")
     print(f"Ulstrasonic value: {ultrasonic()}")
-    print(f"Rain_sensor value: {rain_sensor()}")
+    print(f"Rain sensor value: {rain_sensor()}")
     time.sleep(0.5)
