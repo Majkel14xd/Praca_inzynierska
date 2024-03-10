@@ -18,7 +18,7 @@ response = send_at_command('AT')
 print(response)
 
 # Ustawiamy tryb
-print("Setting mode to Access Point (AP)...")
+print("Setting mode to Access Point (AP)....")
 response = send_at_command('AT+CWMODE=1')
 print(response)
 
